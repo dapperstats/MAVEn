@@ -108,3 +108,36 @@ summarize_metabolism <- function(df=""){
     group_by(Chamber, cycle_number) %>%
     summarise(mean = mean(result), sd = sd(result))
 }
+
+
+
+
+maven %>% group_by(Chamber, cycle) %>% slice(c(1,n())) %>% select(Seconds, Chamber, cycle)
+
+
+  met <- metabolism_summary_cycle %>%
+    mutate(act_start = median_time - interval,
+           act_end = median_time + interval)
+  
+  act <- maven %>% 
+    select(Seconds:BP_kPa, cycle, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
+    pivot_longer(cols = Act_1:Act_16, names_to = "parameter", values_to = "result") %>%
+    left_join(met, by = c("Chamber", "cycle")) %>%
+    group_by(Chamber, cycle) %>%
+    filter(Seconds > median_time - interval & Seconds < median_time + interval) %>%
+    group_by(Chamber, cycle) %>%
+    mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
+    fulter(result > threshold)
+  
+  ggplot(act, aes(measurement_number, result)) +
+    geom_point() + facet_wrap(~Chamber)
+  
+  
+  %>%
+    filter(result > 0) %>% ## can we make this assumption?
+    arrange(parameter) %>% 
+    group_by(Chamber, cycle) %>%
+    mutate(measurement_number = Seconds - min(Seconds) + 1)
+  
+  return(act)
+}
