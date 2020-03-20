@@ -1,27 +1,24 @@
 code <- sapply(list.files(file.path(".", "code"), full.names = TRUE), source)
 
-maven <- read_maven()
+# remove baseline measurements
+maven <- read_maven() %>% filter(Chamber > 0)
 
 # assume that met measurements are > 0
 #This is the fly metabolism data
 
 
-cycle_starttime = maven$Seconds[maven$Chamber == 1][1]
+cycle_starttime_init = maven$Seconds[maven$Chamber == 1][1]
 chamber_measure_duration = 120
 n_chambers = 16
-baseline_measurement_duration = 180
+#baseline_measurement_duration = 180
 cycle_duration = n_chambers * chamber_measure_duration
+n_cycles = nrow(maven)/(cycle_starttime_init + cycle_duration + 180)
 
-#iterative time, multiply by number of cycles
-cycle_endtime = cycle_starttime + chamber_measure_duration * n_chambers
+test <- matrix(ncol = 3, nrow = 4)
+colnames(test) <- c("cycle", "start", "end")
 
-test = maven
-test$cycle_number <- NA
-  
-for(i in 1:nrows(maven)){
-  test$cycle_number[test$Seconds[i] >= cycle_starttime & test$Seconds[i] < cycle_duration] <- i
-  cycle_starttime <- cycle_starttime + cycle_duration + baseline_measurement_duration
-}
+
+
 
 
 
@@ -33,14 +30,34 @@ flychamber <- maven %>%
 
 
 act <- maven %>% 
-  select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
+  select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, cycle, Act_1:Act_16) %>%
   pivot_longer(cols = Act_1:Act_16, names_to = "parameter", values_to = "result") %>%
   arrange(Seconds)
 
 met <- maven %>% 
-  select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, CO2_mlminFly1:CO2_mlminFly16) %>%
+  select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, cycle, CO2_mlminFly1:CO2_mlminFly16) %>%
   pivot_longer(cols = CO2_mlminFly1:CO2_mlminFly16, names_to = "parameter", values_to = "result") %>%
-  arrange(Seconds)
+  filter(result > 0) %>% ## can we make this assumption?
+  arrange(parameter) %>% 
+  group_by(Chamber, cycle) %>%
+  mutate(measurement_number = Seconds - min(Seconds)+1)
+
+met_summary <- met %>%
+  group_by(Chamber, cycle) %>%
+  summarize(median_co2_ul.h = co2_convertion(result)) %>%
+  group_by(Chamber) %>%
+  summarize(mean = mean(median_co2_ul.h), 
+            sd = sd(median_co2_ul.h),
+            n = round(n_cycles), 
+            sem = sem(median_co2_ul.h, n),
+            lower.ci = lower.ci(mean, n, sem),
+            #lower.ci = lower.ci(median_co2_ul.h, n),
+            upper.ci = upper.ci(median_co2_ul.h, n))
+
+
+ggplot(data = met, aes(measurement_number, result, col = cycle)) +
+  geom_point() +
+  facet_wrap( ~ Chamber, scales = "free_y")
 
 
 met$Seconds[met$Chamber == 1]
