@@ -2,7 +2,9 @@ summarize_metabolism <- function(extract_metabolism, type = ""){
   
   met_summary <- extract_metabolism %>%
     group_by(Chamber, cycle) %>%
-    summarize(median_co2_ul.h = co2_convertion(result)) 
+    summarize(median_co2_ul.h = co2_convertion_median(result),
+              median_time = median(Seconds),
+              median_temp = median(TempC)) 
   
   if(type == "by_chamber"){
     met_summary <- met_summary %>%
