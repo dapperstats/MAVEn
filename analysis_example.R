@@ -26,3 +26,13 @@ metabolism_diag(maven_raw, metabolism_summary_cycle)
 # generate summary table by chamber
 metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, type = "by_chamber")
 
+# extract activity data 
+fly_activity<- extract_activity(maven, metabolism_summary_cycle, interval= 60, threshold = 0.01)
+activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle")
+activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
+
+test.out <- create_data_table(metabolism_summary_cycle, activity_summary_cycle) %>%
+  mutate(mean_activity = replace_na(mean_activity,0),
+         activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
+ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
+  geom_boxplot() + geom_point(position = position_jitter(width = .2))
