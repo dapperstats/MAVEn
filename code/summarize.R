@@ -1,6 +1,6 @@
-summarize_metabolism <- function(extract_metabolism, type = ""){
+summarize_metabolism <- function(fly_metabolism, type = ""){
   
-  met_summary <- extract_metabolism %>%
+  met_summary <- fly_metabolism %>%
     group_by(Chamber, cycle) %>%
     summarize(median_co2_ul.h = co2_convertion_median(result),
               median_time = median(Seconds),
@@ -22,21 +22,23 @@ summarize_metabolism <- function(extract_metabolism, type = ""){
 }
 
 
-summarize_activity <- function(extract_activity, type = ""){
+summarize_activity <- function(fly_activity, type = "", activity_threshold = "0.5"){
   
-  act_summary <- extract_axtivity %>%
+  act_summary <- fly_activity %>%
     group_by(Chamber, cycle) %>%
-    summarize(median_activity = median(result)) 
+    summarize(mean_activity = mean(result), 
+              median_activity = median(result)) %>%
+    mutate(activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
   
-  if(type = "by_chamber"){ 
+  if(type == "by_chamber"){ 
     act_summary <- act_summary %>%
       group_by(Chamber) %>%
-      summarize(mean = mean(median_activity), 
-                sd = sd(median_activity),
+      summarize(mean = mean(mean_activity), 
+                sd = sd(mean_activity),
                 n = round(n_cycles), 
-                sem = sem(median_activity, n),
-                lower.ci = lower.ci(median_activity, n),
-                upper.ci = upper.ci(median_activity, n))
+                sem = sem(mean_activity, n),
+                lower.ci = lower.ci(mean_activity, n),
+                upper.ci = upper.ci(mean_activity, n))
   }
   
   return(act_summary)
