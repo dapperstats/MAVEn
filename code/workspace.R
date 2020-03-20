@@ -140,3 +140,4 @@ test.out <- create_data_table(metabolism_summary_cycle, activity_summary_cycle) 
          activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
 ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
   geom_boxplot() + geom_point(position = position_jitter(width = .2))
+
