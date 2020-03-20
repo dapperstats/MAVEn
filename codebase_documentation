@@ -1,0 +1,13 @@
+This document provides the preliminary setup of the MAVEn workflow pipeline package.
+
+1. Data are loaded into the space using `read_maven`, which removes all baseline data from the dataset prior to processing.
+
+2. Cycle numbers are assigned to the data using `cycle_number` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn dataset with appended cycle numbers.
+
+3. The complete dataset is then deconstructed into a dataset for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
+
+4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. These functions make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 5 minutes before reading) and an activity state based on a given threshold. 
+
+5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO2, and activity for a MAVEn run. 
+
+6. To check that the calculated values line up with the dataset, `visual_diagnostics` provides several plots to illustrate how the calculated data values align with the raw data files. 
