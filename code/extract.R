@@ -13,16 +13,22 @@ extract_metabolism <- function(maven){
 }
 
 # Creates a dataframe for the fly activity
-extract_activity <- function(maven){
+extract_activity <- function(maven, metabolism_summary_cycle, interval = "", threshold = ""){
   
-  met <- maven %>% 
-    select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, cycle, Act_1:Act_16) %>%
+  met <- metabolism_summary_cycle %>%
+    mutate(act_start = median_time - interval,
+           act_end = median_time + interval)
+  
+  act <- maven %>% 
+    select(Seconds:BP_kPa, cycle, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
     pivot_longer(cols = Act_1:Act_16, names_to = "parameter", values_to = "result") %>%
-    filter(result > 0) %>% ## can we make this assumption?
-    arrange(parameter) %>% 
+    left_join(met, by = c("Chamber", "cycle")) %>%
     group_by(Chamber, cycle) %>%
-    mutate(measurement_number = Seconds - min(Seconds) + 1)
+    filter(Seconds > median_time - interval & Seconds < median_time + interval) %>%
+    group_by(Chamber, cycle) %>%
+    mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
+    filter(result > threshold)
   
-  return(met)
+  return(act)
 }
 
