@@ -28,6 +28,9 @@ metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, type = "by_ch
 
 # extract activity data 
 fly_activity<- extract_activity(maven, metabolism_summary_cycle, interval= 60, threshold = 0.01)
+ggplot(fly_activity, aes(measurement_number, result, col = cycle)) +
+  geom_point() + facet_wrap(~Chamber)
+
 activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle")
 activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
 
