@@ -51,3 +51,26 @@ metablism_trend <- function(fly_metabolism){
                           begin = 0.2, end = 0.8)
   return(p)
 }
+
+
+
+# activity_diag <- function(maven_raw, metabolism_summary_cycle, activity_summary_cycle){
+#   
+#   df <- maven_raw %>%
+#     select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
+#     pivot_longer(cols = Act_1:Act_16, names_to = "parameter", values_to = "result") %>%
+#     mutate(parameter = as.numeric(gsub(x = parameter, "Act_","")))
+#   
+#   
+#   p <- ggplot(data = df, aes(x = Seconds, y = result)) +
+#     facet_grid(parameter ~ .) + 
+#     geom_line() + 
+#     geom_point(data = metabolism_summary_cycle %>% mutate(parameter = Chamber), 
+#                aes(x = median_time, y = median_co2_ul.h, col = parameter),
+#                size = 4) +
+#     labs(title = "Metabolism diagnostic",
+#          x = "Seconds", y = expression(CO[2]~(mu*L~h^-1)))
+#   
+#   return(p)
+#   
+# }
