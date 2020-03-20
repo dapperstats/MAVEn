@@ -26,15 +26,15 @@ summarize_activity <- function(fly_activity, type = "", activity_threshold = "0.
   
   act_summary <- fly_activity %>%
     group_by(Chamber, cycle) %>%
-    summarize(mean_activity = mean(result), 
-              median_activity = median(result)) %>%
+    summarize(mean_activity = mean(result, na.rm = T), 
+              median_activity = median(result, na.rm = T)) %>%
     mutate(activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
   
   if(type == "by_chamber"){ 
     act_summary <- act_summary %>%
       group_by(Chamber) %>%
-      summarize(mean = mean(mean_activity), 
-                sd = sd(mean_activity),
+      summarize(mean = mean(mean_activity, na.rm = T), 
+                sd = sd(mean_activity, na.rm = T),
                 n = round(n_cycles), 
                 sem = sem(mean_activity, n),
                 lower.ci = lower.ci(mean_activity, n),
