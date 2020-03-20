@@ -1,7 +1,10 @@
-co2_convertion <- function(x){
+co2_convertion_median <- function(x){
   co2.ul.h <- median(x) * 1000 * 60
 }
 
+co2_convertion <- function(x){
+  co2.ul.h <- x * 1000 * 60
+}
 
 sem <- function(x, n){
   sem <- sd(x)/sqrt(n)
