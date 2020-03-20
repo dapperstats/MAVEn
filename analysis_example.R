@@ -34,7 +34,8 @@ ggplot(fly_activity, aes(measurement_number, result, col = cycle)) +
 activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle")
 activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
 
-test.out <- create_data_table(metabolism_summary_cycle, activity_summary_cycle) %>%
+# create data table for analysis purposes
+test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle) %>%
   mutate(mean_activity = replace_na(mean_activity,0),
          activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
 ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
