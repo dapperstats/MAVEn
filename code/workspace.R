@@ -129,15 +129,14 @@ maven %>% group_by(Chamber, cycle) %>% slice(c(1,n())) %>% select(Seconds, Chamb
     mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
     fulter(result > threshold)
   
-  ggplot(act, aes(measurement_number, result)) +
+  ggplot(fly_activity, aes(measurement_number, result, col = cycle)) +
     geom_point() + facet_wrap(~Chamber)
   
+
   
-  %>%
-    filter(result > 0) %>% ## can we make this assumption?
-    arrange(parameter) %>% 
-    group_by(Chamber, cycle) %>%
-    mutate(measurement_number = Seconds - min(Seconds) + 1)
-  
-  return(act)
-}
+metabolism_summary_cycle %>% left_join(activity_summary_cycle, by = c("Chamber","cycle"))
+test.out <- create_data_table(metabolism_summary_cycle, activity_summary_cycle) %>%
+  mutate(mean_activity = replace_na(mean_activity,0),
+         activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
+ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
+  geom_boxplot() + geom_point(position = position_jitter(width = .2))
