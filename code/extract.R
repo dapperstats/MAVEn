@@ -27,7 +27,7 @@ extract_activity <- function(maven, metabolism_summary_cycle, interval = "", thr
     filter(Seconds > median_time - interval & Seconds < median_time + interval) %>%
     group_by(Chamber, cycle) %>%
     mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
-    filter(result > threshold)
+    filter(result >= threshold)
   
   return(act)
 }
