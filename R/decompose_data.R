@@ -9,7 +9,8 @@ extract_metabolism <- function(maven) {
     filter(result > 0) %>% ## can we make this assumption?
     arrange(Seconds) %>% 
     group_by(Chamber, cycle) %>%
-    mutate(measurement_number = Seconds - min(Seconds) + 1)
+    mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
+    filter(cycle != "NA") # remove data with an unassigned cycle
     
   return(met)
 }
