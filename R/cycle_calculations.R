@@ -30,18 +30,18 @@ assign_cyclenumber_at1_variable <- function(maven,
     message(paste("There were", n_cycles, "cycles detected in this dataset."))
     df$cycle <- "NA"
     
-    if((ceiling(n_cycles) - 1) > 1) {
-        for (i in 1:ceiling(n_cycles) - 1) {
-            df[df$Seconds >= time.list[i] &
-                    df$Seconds <= time.list[i + 1], "cycle"] <- i
-        }
-        
-    } else {
+    # if((ceiling(n_cycles) - 1) > 1) {
+    #     for (i in 1:ceiling(n_cycles) - 1) {
+    #         df[df$Seconds >= time.list[i] &
+    #                 df$Seconds <= time.list[i + 1], "cycle"] <- i
+    #     }
+    #     
+    # } else {
         for (i in 1:ceiling(n_cycles)) {
             df[df$Seconds >= time.list[i] &
                     df$Seconds <= time.list[i + 1], "cycle"] <- i
         }
-    }
+    #}
     
     return(df)
 }
