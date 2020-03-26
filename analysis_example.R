@@ -5,8 +5,8 @@ maven_raw <- read_maven(maven_datafile = "./maven_output.csv", baseline = T)
 plot_maven_overview(maven_raw)
 
 ### The TC1 values from this file do not appear to be the same as those in the other. ###
-maven_raw2 <- read_maven(maven_datafile = "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", baseline = T)
-plot_maven_overview(maven_raw2)
+maven_raw <- read_maven(maven_datafile = "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", baseline = T)
+plot_maven_overview(maven_raw)
 
 # load the modified MAVEn dataset without baseline for workflow processing
 ### Do we need the baseline data for analysis? ###
@@ -44,8 +44,12 @@ activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle")
 activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
 
 # create data table for analysis purposes
+activity_threshold <- 0.01
 test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle) %>%
   mutate(mean_activity = replace_na(mean_activity,0),
          activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
+
 ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
-  geom_boxplot() + geom_point(position = position_jitter(width = .2))
+  geom_boxplot() + 
+  geom_point(position = position_jitter(width = .2)) +
+  labs(title = "Activity State", x = "", y = expression(Median~CO[2]~(mu*L~h^-1)))
