@@ -1,4 +1,12 @@
 ## Creates a dataframe for the fly metabolism
+#' Title
+#'
+#' @param maven 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 extract_metabolism <- function(maven) {
   
   met <- maven %>% 
@@ -16,6 +24,17 @@ extract_metabolism <- function(maven) {
 }
 
 # Creates a dataframe for the fly activity
+#' Title
+#'
+#' @param maven.cycle 
+#' @param metabolism_summary_cycle 
+#' @param interval 
+#' @param threshold 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 extract_activity <- function(maven.cycle, 
   metabolism_summary_cycle, interval = "", threshold = "") {
   
