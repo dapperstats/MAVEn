@@ -1,5 +1,6 @@
-## need to add in n_cycles
 summarize_metabolism <- function(fly_metabolism, type = "") {
+    
+    n_cycles <- as.numeric(max(fly_metabolism$cycle))
     
     met_summary <- fly_metabolism %>% 
         group_by(Chamber, cycle) %>% 
@@ -11,7 +12,7 @@ summarize_metabolism <- function(fly_metabolism, type = "") {
             group_by(Chamber) %>% 
             summarize(mean = mean(median_co2_ul.h), 
                 sd = sd(median_co2_ul.h), 
-                n = round(n_cycles), 
+                n = n_cycles, 
                 sem = sem(median_co2_ul.h, n), 
                 lower.ci = lower.ci(median_co2_ul.h, n), 
                 upper.ci = upper.ci(median_co2_ul.h, n))
@@ -25,6 +26,8 @@ summarize_metabolism <- function(fly_metabolism, type = "") {
 summarize_activity <- function(fly_activity, type = "", 
     activity_threshold = "0.5") {
     
+    n_cycles <- as.numeric(max(fly_activity$cycle))
+    
     act_summary <- fly_activity %>% 
         group_by(Chamber, cycle) %>% 
         summarize(mean_activity = mean(result, na.rm = T), 
@@ -37,7 +40,7 @@ summarize_activity <- function(fly_activity, type = "",
             group_by(Chamber) %>% 
             summarize(mean = mean(mean_activity, na.rm = T), 
                 sd = sd(mean_activity, na.rm = T), 
-                n = round(n_cycles), 
+                n = n_cycles, 
                 sem = sem(mean_activity, n), 
                 lower.ci = lower.ci(mean_activity, n), 
                 upper.ci = upper.ci(mean_activity, n))
