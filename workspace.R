@@ -1,4 +1,4 @@
-code <- sapply(list.files(file.path(".", "code"), full.names = TRUE), source)
+code <- sapply(list.files(file.path(".", "R"), full.names = TRUE), source)
 
 # remove baseline measurements
 maven <- read_maven() %>% filter(Chamber > 0)

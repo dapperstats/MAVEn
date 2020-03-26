@@ -58,7 +58,7 @@ plot_maven_overview <- function(maven_raw,
 #' @examples metablism_trend(fly_metabolism, outdir = "output", 
 #' out_filename = "", out_filetype = ".png")
 metablism_trend <- function(fly_metabolism, 
-    outdir = "output", out_filename = "", out_filetype = ".png") {
+    outdir = "output", out_filename = "MetabolismTrends", out_filetype = ".png") {
     p <- ggplot(data = fly_metabolism %>% 
             mutate(result = co2_convertion(result)), 
         aes(x = measurement_number, y = result, col = cycle)) + 
@@ -79,7 +79,20 @@ metablism_trend <- function(fly_metabolism,
     return(p)
 }
 
-metabolism_diag <- function(maven_raw, metabolism_summary_cycle) {
+#' Visual diagnostic for metabolism data using MAVEn with baseline
+#'
+#' @param maven_raw Complete MAVEn dataset including baseline readings.
+#' @param metabolism_summary_cycle Dataframe calculated by \code{summarize_metabolism} with the "by_cycle" type indicated. 
+#' @param outdir Folder where figure should be stored.
+#' @param out_filename Figure name.
+#' @param out_filetype Figure file type.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
+    outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png") {
     
     df <- maven_raw %>% 
         select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, 
@@ -98,10 +111,17 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle) {
                 mutate(parameter = Chamber), 
             aes(x = median_time, y = median_co2_ul.h, 
                 col = parameter), 
-            size = 4) + 
+            size = 3) + 
         labs(title = "Metabolism diagnostic", 
             x = "Seconds", 
-            y = expression(CO[2] ~ (mu * L ~ h^-1)))
+            y = expression(CO[2] ~ (mu * L ~ h^-1))) +
+        theme(legend.position = "none")
+    
+    outpath <- file.path(outdir, 
+        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+    
+    ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
+        width = 4, height = 8)
     
     return(p)
     
