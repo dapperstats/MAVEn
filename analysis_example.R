@@ -9,21 +9,17 @@ plot_maven_overview(maven_raw2)
 
 # load the modified MAVEn dataset without baseline for workflow processing
 maven <- read_maven(maven_datafile = "./maven_output.csv", baseline = F)
-maven <- read_maven(datadir = "data", maven_datafile = "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", baseline = F)
+maven <- read_maven(datadir = "data", 
+  maven_datafile = "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", baseline = F)
 
 # assign a cycle number to the dataset
-maven.cycle <- assign_cyclenumber(maven)
-maven.cycleat1 <- assign_cyclenumber_at1(maven)
-maven.cycle.var <- assign_cyclenumber_at1_variable(maven)
+maven.cycle <- assign_cyclenumber_at1_variable(maven)
+
 # Extract the metabolism data
 fly_metabolism <- extract_metabolism(maven.cycle)
-fly_metabolism_at1 <- extract_metabolism(maven.cycleat1)
-fly_metabolism_var <- extract_metabolism(maven.cycle.var)
 
 # visualize the trend
 metablism_trend(fly_metabolism)
-metablism_trend(fly_metabolism_at1)
-metablism_trend(fly_metabolism_var)
 
 # generate summary table by cycle
 metabolism_summary_cycle <- summarize_metabolism(fly_metabolism, type = "by_cycle")
