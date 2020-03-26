@@ -127,7 +127,43 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
     
 }
 
-
+#' Plot fly activity trends.
+#'
+#'\code{activity_trend} graphcially displays the fly activity data by chamber. The data are adjusted to a standardized measurement reading for illustration. 
+#'
+#' @param fly_metabolism Fly activity dataframe extracted from the MAVEn without baseline using \code{extract_activity}. 
+#' @param outdir Folder where figure should be stored.
+#' @param out_filename Figure name.
+#' @param out_filetype Figure file type.
+#'
+#' @return
+#' @export
+#'
+#' @examples activity_trend(fly_activity outdir = "output", 
+#' out_filename = "", out_filetype = ".png")
+activity_trend <- function(fly_activity, 
+    outdir = "output", out_filename = "ActivityTrends", out_filetype = ".png") {
+    
+    p <- ggplot(data = fly_activity, 
+        aes(x = measurement_number, y = result, col = cycle)) + 
+        geom_point() + 
+        facet_wrap(~ Chamber, scales = "free_y") + 
+        geom_vline(aes(xintercept = measurement_number_time), 
+            col = "red", linetype = "dashed") +
+        labs(title = "Fly Activity Trends", 
+            x = "Measurement Number", 
+            y = expression(CO[2] ~ (mu * L ~ h^-1))) + 
+        scale_color_viridis_d(option = "D", begin = 0.2, end = 0.8) +
+        theme(legend.position = "bottom")
+    
+    outpath <- file.path(outdir, 
+        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+    
+    ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
+        width = 7, height = 4)
+    
+    return(p)
+}
 
 
 
