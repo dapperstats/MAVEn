@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param fly_metabolism 
+#' @param type 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 summarize_metabolism <- function(fly_metabolism, type = "") {
     
     n_cycles <- as.numeric(max(fly_metabolism$cycle))
@@ -23,6 +32,16 @@ summarize_metabolism <- function(fly_metabolism, type = "") {
 }
 
 
+#' Title
+#'
+#' @param fly_activity 
+#' @param type 
+#' @param activity_threshold 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 summarize_activity <- function(fly_activity, type = "", 
     activity_threshold = "0.5") {
     
