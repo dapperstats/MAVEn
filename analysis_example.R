@@ -1,10 +1,11 @@
 
-# load the raw MAVEn dataset
+# load the raw MAVEn dataset with baseline information
+# This is useful for plotting the overall experimental summary
 maven_raw <- read_maven(maven_file = "./maven_output.csv", baseline = T)
 plot_maven_overview(maven_raw)
 
 
-# load the modified MAVEn dataset
+# load the modified MAVEn dataset without baseline for workflow processing
 maven <- read_maven(maven_file = "./maven_output.csv", baseline = F)
 
 # assign a cycle number to the dataset
