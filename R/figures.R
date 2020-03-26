@@ -90,7 +90,7 @@ metablism_trend <- function(fly_metabolism,
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples metabolism_diag(maven_raw, metabolism_summary_cycle, outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png")
 metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
     outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png") {
     
