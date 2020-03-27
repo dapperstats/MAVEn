@@ -34,7 +34,8 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
         theme_classic()
     
     outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+                         out_filename = paste0(Sys.Date(),"_",maven_experiment, 
+                                               "_", out_filename, out_filetype))
     
     ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
         width = 4, height = 4)
@@ -170,26 +171,40 @@ activity_trend <- function(fly_activity, maven_experiment = "",
 
 
 
-# activity_diag <- function(maven_raw,
-#     metabolism_summary_cycle,
-#     activity_summary_cycle) {
-#     
-#     df <- maven_raw %>% select(Seconds:BP_kPa, 
-#         c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
-#         pivot_longer(cols = Act_1:Act_16,
-#             names_to = 'parameter',
-#             values_to = 'result') %>%
-#         mutate(parameter = as.numeric(gsub(x = parameter, 'Act_', '')))
-#     
-#     p <- ggplot(data = df, aes(x = Seconds, y
-#                 = result)) + 
-#         facet_grid(parameter ~ .) + geom_line() +
-#         geom_point(data = metabolism_summary_cycle %>%
-#                 mutate(parameter = Chamber),
-#             aes(x = median_time, y = median_co2_ul.h, col = parameter),
-#             size = 4) +
-#         labs(title = 'Metabolism diagnostic',
-#             x = 'Seconds', y = expression(CO[2] ~ (mu * L ~ h ^ -1))) 
-#     
-#     return(p)
-# }
+activity_diag <- function(maven_raw,
+                          metabolism_summary_cycle,
+                          activity_summary_cycle, interval = 60) {
+    df <- maven_raw %>%
+        select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
+        pivot_longer(cols = Act_1:Act_16,
+                     names_to = 'parameter',
+                     values_to = 'result') %>%
+        mutate(parameter = as.numeric(gsub(x = parameter, 'Act_', '')))
+    
+     maven_summary <- maven_datatable(metabolism_summary_cycle, 
+                        activity_summary_cycle, 
+                        out_filename = NULL) %>%
+         mutate(parameter = Chamber, interval.start = median_time - interval,
+                interval.end = median_time + interval)
+     maven_summary <- as.data.frame(maven_summary)
+    
+    p <- ggplot(data = df, aes(x = Seconds, y = result)) +
+        geom_tile(data = maven_summary, 
+                  aes(x = median_time,y = 15, width = 120, height =30, 
+                      fill = parameter)) +
+        facet_grid(parameter ~ .) + 
+        geom_line() +
+        geom_point(data = maven_summary,
+                       aes(x = median_time, y = mean_activity, 
+                           col = parameter),
+                       size = 2) +
+        #geom_vline(data = maven_summary,
+                  #aes(xintercept = interval.start, col = parameter))+ 
+        #geom_vline(data = maven_summary,
+                  # aes(xintercept = interval.end, col = parameter))+
+        labs(title = 'Activity diagnostic',
+             x = 'Seconds',
+             y = "")
+    
+    return(p)
+}
