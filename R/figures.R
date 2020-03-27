@@ -16,7 +16,7 @@
 #' @examples
 #' plot_maven_overview(maven_raw, outdir = "output", 
 #' out_filename = "ExpOverview", out_filetype = ".png"))
-plot_maven_overview <- function(maven_raw, 
+plot_maven_overview <- function(maven_raw, maven_experiment = "",
     outdir = "output", out_filename = "ExpOverview", out_filetype = ".png") {
     
     experiment <- maven_raw %>% 
@@ -57,7 +57,7 @@ plot_maven_overview <- function(maven_raw,
 #'
 #' @examples metablism_trend(fly_metabolism, outdir = "output", 
 #' out_filename = "", out_filetype = ".png")
-metablism_trend <- function(fly_metabolism, 
+metablism_trend <- function(fly_metabolism, maven_experiment = "",
     outdir = "output", out_filename = "MetabolismTrends", out_filetype = ".png") {
     p <- ggplot(data = fly_metabolism %>% 
             mutate(result = co2_convertion(result)), 
@@ -71,7 +71,8 @@ metablism_trend <- function(fly_metabolism,
         theme(legend.position = "bottom")
     
     outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+        out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
+            out_filename, out_filetype))
     
     ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
         width = 7, height = 4)
@@ -91,7 +92,7 @@ metablism_trend <- function(fly_metabolism,
 #' @export
 #'
 #' @examples metabolism_diag(maven_raw, metabolism_summary_cycle, outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png")
-metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
+metabolism_diag <- function(maven_raw, metabolism_summary_cycle, maven_experiment = "",
     outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png") {
     
     df <- maven_raw %>% 
@@ -118,7 +119,8 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
         theme(legend.position = "none")
     
     outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+        out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
+            out_filename, out_filetype))
     
     ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
         width = 4, height = 8)
@@ -141,15 +143,15 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #'
 #' @examples activity_trend(fly_activity outdir = "output", 
 #' out_filename = "", out_filetype = ".png")
-activity_trend <- function(fly_activity, 
+activity_trend <- function(fly_activity, maven_experiment = "",
     outdir = "output", out_filename = "ActivityTrends", out_filetype = ".png") {
     
     p <- ggplot(data = fly_activity, 
         aes(x = measurement_number, y = result, col = cycle)) + 
         geom_point() + 
         facet_wrap(~ Chamber, scales = "free_y") + 
-        geom_vline(aes(xintercept = measurement_number_time), 
-            col = "red", linetype = "dashed") +
+        #geom_vline(aes(xintercept = measurement_number_time), 
+         #   col = "red", linetype = "dashed") +
         labs(title = "Fly Activity Trends", 
             x = "Measurement Number", 
             y = expression(CO[2] ~ (mu * L ~ h^-1))) + 
@@ -157,7 +159,8 @@ activity_trend <- function(fly_activity,
         theme(legend.position = "bottom")
     
     outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+        out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
+                            out_filename, out_filetype))
     
     ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
         width = 7, height = 4)
