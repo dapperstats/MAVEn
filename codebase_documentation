@@ -10,4 +10,4 @@ This document provides the preliminary setup of the MAVEn workflow pipeline pack
 
 5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO2, and activity for a MAVEn run. 
 
-6. To check that the calculated values line up with the dataset, `visual_diagnostics` provides several plots to illustrate how the calculated data values align with the raw data files. It incorporates the `metabolism_diag` and `activity_diag` functions and uses the raw MAVEn dataset.
+6. [WIP] To check that the calculated values line up with the dataset, `visual_diagnostics` provides several plots to illustrate how the calculated data values align with the raw data files. It incorporates the `metabolism_diag` and `activity_diag` functions and uses the raw MAVEn dataset.
