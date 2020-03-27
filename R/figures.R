@@ -34,7 +34,8 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
         theme_classic()
     
     outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_", out_filename, out_filetype))
+                         out_filename = paste0(Sys.Date(),"_",maven_experiment, 
+                                               "_", out_filename, out_filetype))
     
     ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
         width = 4, height = 4)
