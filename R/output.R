@@ -1,4 +1,13 @@
-maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle) {
-    metabolism_summary_cycle %>% 
+maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
+  outdir = "output", out_filename = "", maven_experiment = "") {
+    
+  table <- metabolism_summary_cycle %>% 
     left_join(activity_summary_cycle, by = c("Chamber", "cycle"))
+  
+  outpath <- file.path(outdir, 
+    out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
+      out_filename, out_filetype))
+  
+  write.csv(table, file = outpath, row.names = F)
+  return(table)
 }
