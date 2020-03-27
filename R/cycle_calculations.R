@@ -3,7 +3,7 @@
 # number of measurements per chamber. Waiting on James to confirm that this is
 # how he wants to proceed.
 # assign_cyclenumber
-assign_cyclenumber_at1_variable <- function(maven,
+assign_cyclenumber <- function(maven,
     n_chambers = 16,
     chamber_measure_duration = 120) {
     
@@ -49,7 +49,7 @@ assign_cyclenumber_at1_variable <- function(maven,
 
 # assign cycle numbers to the dataframe based on the first chamber measurement
 # no flexibility in the number of measurements per chamber
-assign_cyclenumber <- function(maven, n_chambers = 16,
+assign_cyclenumber_old <- function(maven, n_chambers = 16,
     chamber_measure_duration = 120) {
     
     df <- maven %>% arrange(Seconds)
