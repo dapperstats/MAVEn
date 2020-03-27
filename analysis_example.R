@@ -9,6 +9,15 @@
 ##
 ####
 
+## Overview
+# Evaluation of the MAVEn datafiles can be completed in one of two ways: either step by step as outlines below or with the function `evaluate_maven` which will provide all graphics and tables for a single experimental run.
+#
+# Things to still be completed:
+#   - What additional information about the experiment needs to be recorded?
+#   - Calculating fly activity with the absolute difference sums
+#   - Visual diagnostic for the fly metabolism data
+#   - Finalizing output datatable with experimental information, additional calculations
+
 
 ## Workflow example 1 ----
 
@@ -18,7 +27,7 @@
 ## Evaluate the experimental timecourse ----
 
 maven_raw <- read_maven(maven_datafile = "./maven_output.csv", baseline = T)
-plot_maven_overview(maven_raw)
+plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
 
 ##  Data processing pipeline ----
 
@@ -116,18 +125,20 @@ activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber"
 
 test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle) 
 
-activity_threshold <- 0.01
-test.out_summary <- test.out %>% mutate(mean_activity = replace_na(mean_activity,0),
-         activity_state = ifelse(mean_activity >= activity_threshold, "Active", "Inactive"))
+activity_threshold <- 0.1
+test.out_summary <- test.out %>% 
+  mutate(mean_activity = replace_na(mean_activity, 0),
+         activity_state = ifelse(mean_activity >= activity_threshold, 
+                                 "Active", "Inactive"))
 
-ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
+ggplot(test.out_summary, aes(x = activity_state, y = median_co2_ul.h)) +
   geom_boxplot() + 
   geom_point(position = position_jitter(width = .2)) +
   labs(title = "Activity State", x = "", y = expression(Median~CO[2]~(mu*L~h^-1)))
 
 
 ## [WIP] Complete analysis workflow ----
-evaluate_maven()
+evaluate_maven(maven_datafile = "maven_output.csv", maven_experiment = "test.evaluate")
 
 
 
