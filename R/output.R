@@ -6,7 +6,7 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
   
   outpath <- file.path(outdir, 
     out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
-      out_filename, out_filetype))
+      out_filename, ".csv"))
   
   write.csv(table, file = outpath, row.names = F)
   return(table)
