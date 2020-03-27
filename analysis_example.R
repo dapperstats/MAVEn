@@ -146,15 +146,18 @@ evaluate_maven(maven_datafile = "maven_output.csv", maven_experiment = "test.eva
 
 ## Evaluate the experimental timecourse ----
 
-maven_raw <- read_maven(maven_datafile = "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", baseline = T)
-plot_maven_overview(maven_raw, mave_experiment = "maven.example2")
+maven_raw <- read_maven(maven_datafile = 
+                          "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", 
+                        baseline = T)
+plot_maven_overview(maven_raw, maven_experiment = "maven.example2")
 
 ##  Data processing pipeline ----
 
 # Step 1: load the MAVEn dataset without baseline ----
 #  for workflow processing by toggling the baseline parameter.
 
-maven <- read_maven(maven_datafile = "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", 
+maven <- read_maven(maven_datafile = 
+                      "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", 
                     baseline = F)
 
 
