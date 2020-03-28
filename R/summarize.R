@@ -1,3 +1,18 @@
+maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
+                            outdir = "output", out_filename = "ExperimentSummaryTable", maven_experiment = "") {
+    
+    table <- metabolism_summary_cycle %>% 
+        left_join(activity_summary_cycle, by = c("Chamber", "cycle"))
+    
+    outpath <- file.path(outdir, 
+                         out_filename = paste0(Sys.Date(),"_", 
+                                               maven_experiment, "_",
+                                               out_filename, ".csv"))
+    write.csv(table, file = outpath, row.names = F)
+    
+    return(table)
+}
+
 #' Title
 #'
 #' @param fly_metabolism 
@@ -43,26 +58,26 @@ summarize_metabolism <- function(fly_metabolism, type = "") {
 #'
 #' @examples
 summarize_activity <- function(fly_activity, type = "", 
-    activity_threshold = "0.5") {
+                               activity_threshold = "0.5") {
     
     n_cycles <- as.numeric(max(fly_activity$cycle))
     
     act_summary <- fly_activity %>% 
         group_by(Chamber, cycle) %>% 
         summarize(mean_activity = mean(result, na.rm = T), 
-            median_activity = median(result, na.rm = T)) %>% 
-        mutate(activity_state = ifelse(mean_activity >= 
-            activity_threshold, "Active", "Inactive"))
+                  median_activity = median(result, na.rm = T)) %>% 
+        mutate(activity_state = ifelse(mean_activity >= activity_threshold, 
+                                       "Active", "Inactive"))
     
     if (type == "by_chamber") {
         act_summary <- act_summary %>% 
             group_by(Chamber) %>% 
             summarize(mean = mean(mean_activity, na.rm = T), 
-                sd = sd(mean_activity, na.rm = T), 
-                n = n_cycles, 
-                sem = sem(mean_activity, n), 
-                lower.ci = lower.ci(mean_activity, n), 
-                upper.ci = upper.ci(mean_activity, n))
+                      sd = sd(mean_activity, na.rm = T), 
+                      n = n_cycles, 
+                      sem = sem(mean_activity, n), 
+                      lower.ci = lower.ci(mean_activity, n), 
+                      upper.ci = upper.ci(mean_activity, n))
     }
     
     return(act_summary)
