@@ -29,31 +29,32 @@ extract_metabolism <- function(maven) {
 #' @param maven.cycle 
 #' @param metabolism_summary_cycle 
 #' @param interval 
-#' @param threshold 
+#' @param activity_baseline 
 #'
 #' @return
 #' @export
 #'
 #' @examples
 extract_activity <- function(maven.cycle, 
-  metabolism_summary_cycle, interval = "", threshold = "") {
+                             metabolism_summary_cycle, 
+                             interval = "", activity_baseline = "") {
   
   met <- metabolism_summary_cycle %>%
     mutate(act_start = median_time - interval,
-            act_end = median_time + interval)
+           act_end = median_time + interval)
   
   act <- maven.cycle %>% 
     select(Seconds:BP_kPa, cycle, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
-    pivot_longer(cols = Act_1:Act_16, names_to = "parameter", 
-      values_to = "result") %>%
+    pivot_longer(cols = Act_1:Act_16, 
+                 names_to = "parameter", 
+                 values_to = "result") %>%
     left_join(met, by = c("Chamber", "cycle")) %>%
     group_by(Chamber, cycle) %>%
     filter(Seconds > median_time - interval & 
-        Seconds < median_time + interval) %>%
+             Seconds < median_time + interval) %>%
     group_by(Chamber, cycle) %>%
-    mutate(measurement_number = Seconds - min(Seconds) + 1,
-      measurement_number_time = median_time - min(Seconds)) %>%
-    filter(result >= threshold)
+    mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
+    filter(result >= activity_baseline)
   
   return(act)
 }
