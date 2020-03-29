@@ -1,8 +1,13 @@
-#' Extract fly metabolism data from MAVEn without baseline
+#'Extract animal metabolism data from MAVEn without baseline
 #'
-#' @param maven.cycle MAVEn dataset with cycles assigned. Must apply \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
+#'\code{extract_metabolism} extracts animal metabolism data from the cycle
+#'integrated MAVEn dataset. It applies a measurement adjustment to the time
+#'series for visualization with \code{metabolism_trend}.
 #'
-#' @return Extracted fly metabolism data.
+#'@param maven.cycle MAVEn dataset with cycles assigned. Must apply
+#'  \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
+#'
+#'@return Extracted animal metabolism data.
 #'
 #' @examples extract_metabolism(maven)
 extract_metabolism <- function(maven.cycle) {
@@ -22,16 +27,26 @@ extract_metabolism <- function(maven.cycle) {
 }
 
 
-#' Extract fly activity data from MAVEn without baseline
+#'Extract animal activity data from MAVEn without baseline
 #'
-#' @param maven.cycle MAVEn dataset with cycles assigned. Must apply \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
-#' @param metabolism_summary_cycle Summary dataset created by \code{summarize_metabolism}.
-#' @param interval Measurement interval for activity evaluation. Must be in seconds. Recommend value less than 60 to stay within the instrument metabolism measurement. 
-#' @param activity_baseline Baseline value for activity. 
+#'\code{extract_activity} extracts animal activity data from the cycle integrated
+#'MAVEn dataset and calculated animal metabolism. It applies a measurement
+#'adjustment to the time series for visualization with \code{activity_trend}.
 #'
-#' @return Extracted fly activity dataset.
+#' @param maven.cycle MAVEn dataset with cycles assigned. Must apply
+#'   \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
+#' @param metabolism_summary_cycle Summary dataset created by
+#'   \code{summarize_metabolism}.
+#' @param interval Measurement interval for activity evaluation. Must be in
+#'   seconds. Recommend value less than 60 to stay within the instrument
+#'   metabolism measurement.
+#' @param activity_baseline Baseline value for activity.
 #'
-#' @examples extract_activity(maven.cycle, metabolism_summary_cycle, interval = 60, activity_baseline = 0.01)
+#' @return Extracted animal activity dataset with median time and activity
+#'   start/end times.
+#'
+#' @examples extract_activity(maven.cycle, metabolism_summary_cycle, 
+#' interval = 60, activity_baseline = 0.01)
 extract_activity <- function(maven.cycle, 
                              metabolism_summary_cycle, 
                              interval = "", activity_baseline = "") {
