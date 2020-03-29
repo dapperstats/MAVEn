@@ -19,7 +19,7 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
                                    activity_baseline = activity_baseline)
   
   
-  activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle", 
+  activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
                                                activity_threshold = activity_threshold)
   out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
                          maven_experiment = maven_experiment) 
@@ -30,8 +30,8 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
   } 
   
   if ("trend" %in% figures){
-    metablism_trend(fly_metabolism, maven_experiment = maven_experiment)
-    activity_trend(fly_activity, maven_experiment = maven_experiment)
+    metablism_trend(animal_metabolism, maven_experiment = maven_experiment)
+    activity_trend(animal_activity, maven_experiment = maven_experiment)
   } 
   
   if ("diag" %in% figures){
