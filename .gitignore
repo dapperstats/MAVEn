@@ -9,3 +9,4 @@ docs/
 output/
 .RData
 .Rhistory
+inst/doc
