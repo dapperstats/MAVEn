@@ -2,8 +2,8 @@
 #'
 #' @param metabolism_summary_cycle Dataframe calculated by
 #'   \code{summarize_metabolism} with the "by_cycle" type indicated.
-#'@param fly_activity Fly activity dataframe extracted from the MAVEn without
-#'  baseline using \code{extract_activity}. 
+#' @param activity_summary_cycle Dataframe calculated by
+#'   \code{summarize_activity} with the "by_cycle" type indicated.
 #' @param outdir Output directory. Defaults to 'output'
 #' @param out_filename File name. Defaults to "ExperimentSummaryTable"
 #' @param maven_experiment MAVEn experiment name.
@@ -31,7 +31,7 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
 
 #' Summarize metabolism data.
 #'
-#' @param fly_metabolism Fly metabolism dataframe extracted from the MAVEn
+#' @param animal_metabolism Animal metabolism dataframe extracted from the MAVEn
 #'  without baseline using \code{extract_metabolism}.
 #' @param type Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").
 #'
@@ -39,13 +39,13 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
 #' @export
 #'
 #' @examples 
-#' summarize_metabolism(fly_metabolism, type = "by_cycle")
-#' summarize_metabolism(fly_metabolism, type = "by_chamber")
-summarize_metabolism <- function(fly_metabolism, type = "") {
+#' summarize_metabolism(animal_metabolism, type = "by_cycle")
+#' summarize_metabolism(animal_metabolism, type = "by_chamber")
+summarize_metabolism <- function(animal_metabolism, type = "") {
     
-    n_cycles <- as.numeric(max(fly_metabolism$cycle))
+    n_cycles <- as.numeric(max(animal_metabolism$cycle))
     
-    met_summary <- fly_metabolism %>% 
+    met_summary <- animal_metabolism %>% 
         group_by(Chamber, cycle) %>% 
         summarize(median_co2_ul.h = co2_convertion_median(result), 
         median_time = median(Seconds), median_temp = median(TempC))
@@ -68,7 +68,7 @@ summarize_metabolism <- function(fly_metabolism, type = "") {
 
 #' Summarize animal activity data.
 #'
-#' @param fly_activity Animal activity dataframe extracted from the MAVEn without
+#' @param animal_activity Animal activity dataframe extracted from the MAVEn without
 #'  baseline using \code{extract_activity}.
 #' @param type Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").
 #' @param activity_threshold Threshold value to establish activity state.
@@ -77,14 +77,14 @@ summarize_metabolism <- function(fly_metabolism, type = "") {
 #' @export
 #'
 #' @examples 
-#' summarize_activity(fly_activity, type = "by_cycle", activity_threshold = 0.5)
-#' summarize_activity(fly_activity, type = "by_chamber", activity_threshold = 0.5)
-summarize_activity <- function(fly_activity, type = "", 
+#' summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
+#' summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
+summarize_activity <- function(animal_activity, type = "", 
                                activity_threshold = "0.5") {
     
-    n_cycles <- as.numeric(max(fly_activity$cycle))
+    n_cycles <- as.numeric(max(animal_activity$cycle))
     
-    act_summary <- fly_activity %>% 
+    act_summary <- animal_activity %>% 
         group_by(Chamber, cycle) %>% 
         summarize(mean_activity = mean(result, na.rm = T), 
                   median_activity = median(result, na.rm = T)) %>% 

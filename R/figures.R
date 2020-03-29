@@ -1,4 +1,4 @@
-#' Plot MAVEn run data.
+#' Plot MAVEn experimental overview data.
 #'
 #' \code{plot_maven_overview} generates four plots to track the instrumental
 #' timecourse and requires the full MAVEn dataset (readings + baseline)
@@ -47,13 +47,13 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
 }
 
 
-#'Plot fly metabolism trends.
+#'Plot animal metabolism trends.
 #'
-#'\code{metabolism_trend} graphcially displays the fly metabolism data by
+#'\code{metabolism_trend} graphcially displays the animal metabolism data by
 #'chamber. The data are adjusted to a standardized measurement reading for
 #'illustration.
 #'
-#'@param fly_metabolism Fly metabolism dataframe extracted from the MAVEn
+#'@param animal_metabolism animal metabolism dataframe extracted from the MAVEn
 #'  without baseline using \code{extract_metabolism}.
 #'@param maven_experiment Experiment name. Applied to both figures and files.
 #'@param outdir Folder where figure should be stored.
@@ -63,16 +63,16 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
 #'@return
 #'@export
 #'
-#' @examples metablism_trend(fly_metabolism, outdir = "output",
+#' @examples metablism_trend(animal_metabolism, outdir = "output",
 #' out_filename = "", out_filetype = ".png")
-metablism_trend <- function(fly_metabolism, maven_experiment = "",
+metablism_trend <- function(animal_metabolism, maven_experiment = "",
     outdir = "output", out_filename = "MetabolismTrends", out_filetype = ".png") {
-    p <- ggplot(data = fly_metabolism %>% 
+    p <- ggplot(data = animal_metabolism %>% 
             mutate(result = co2_convertion(result)), 
         aes(x = measurement_number, y = result, col = cycle)) + 
         geom_point() + 
         facet_wrap(~ Chamber, scales = "free_y") + 
-        labs(title = "Fly Metabolism Trends", 
+        labs(title = "animal Metabolism Trends", 
             x = "Measurement Time", 
             y = expression(CO[2] ~ (mu * L ~ h^-1)),
             caption = maven_experiment) + 
@@ -146,12 +146,12 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle, maven_experimen
     
 }
 
-#'Plot fly activity trends.
+#'Plot animal activity trends.
 #'
-#'\code{activity_trend} graphcially displays the fly activity data by chamber.
+#'\code{activity_trend} graphcially displays the animal activity data by chamber.
 #'The data are adjusted to a standardized measurement reading for illustration.
 #'
-#'@param fly_metabolism Fly activity dataframe extracted from the MAVEn without
+#'@param animal_activity animal activity dataframe extracted from the MAVEn without
 #'  baseline using \code{extract_activity}.
 #'@param maven_experiment Experiment name. Applied to both figures and files.
 #'@param outdir Folder where figure should be stored.
@@ -161,18 +161,18 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle, maven_experimen
 #'@return
 #'@export
 #'
-#' @examples activity_trend(fly_activity outdir = "output",
+#' @examples activity_trend(animal_activity outdir = "output",
 #' out_filename = "", out_filetype = ".png")
-activity_trend <- function(fly_activity, maven_experiment = "",
+activity_trend <- function(animal_activity, maven_experiment = "",
     outdir = "output", out_filename = "ActivityTrends", out_filetype = ".png") {
     
-    p <- ggplot(data = fly_activity, 
+    p <- ggplot(data = animal_activity, 
         aes(x = measurement_number, y = result, col = cycle)) + 
         geom_point() + 
         facet_wrap(~ Chamber, scales = "free_y") + 
         #geom_vline(aes(xintercept = measurement_number_time), 
          #   col = "red", linetype = "dashed") +
-        labs(title = "Fly Activity Trends", 
+        labs(title = "Animal Activity Trends", 
             x = "Measurement Number", 
             y = "Activity",
             caption = maven_experiment) + 
