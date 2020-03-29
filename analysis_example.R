@@ -66,10 +66,6 @@ animal_metabolism <- extract_metabolism(maven.cycle)
 
 metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
 
-p <- metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
-
-p + theme_bw() + geom_line()
-
 
 # Step 4: Produce a summary table for animal metabolism ----
 #
@@ -121,25 +117,26 @@ activity_trend(animal_activity, maven_experiment = "maven.example1")
 # There is currently no calculation for the abs difference sum, but that can be 
 # added into the pipeline.
 activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
-                                             activity_threshold = 5)
+                                             activity_threshold = 1)
 activity_summary_chamber <- summarize_activity(animal_activity, type = "by_chamber")
 
 
 # Step 8: Visual diagnostic of animal activity ----
 activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
-              maven_experiment = "maven_test", interval = 60)
+              maven_experiment = "maven.example1", interval = 60)
 
 
 # Step 9: Create the finalized data table ----
 #
 # create data table for analysis purposes
 
-test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle) 
+test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
+                            maven_experiment = "maven.example1") 
 
 
-ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h)) +
+ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
   geom_boxplot() + 
-  geom_point(position = position_jitter(width = .2)) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.7)) +
   labs(title = "Activity State", x = "", y = expression(Median~CO[2]~(mu*L~h^-1)))
 
 

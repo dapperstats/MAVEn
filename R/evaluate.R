@@ -7,20 +7,24 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
                            activity_baseline = 0.01,
                            activity_threshold = 1, 
                            figures = c("trend","diag","overview")){
-  
+  # Load data
   maven <- read_maven(maven_datafile = maven_datafile, baseline = F)
+  
+  # assign a cycle
   maven.cycle <- assign_cyclenumber(maven)
   
-  fly_metabolism <- extract_metabolism(maven.cycle)
-  metabolism_summary_cycle <- summarize_metabolism(fly_metabolism, type = "by_cycle")
+  # animal metabolism
+  animal_metabolism <- extract_metabolism(maven.cycle)
+  metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, type = "by_cycle")
   
-  fly_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
+  #animal activity
+  animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
                                    interval = interval, 
                                    activity_baseline = activity_baseline)
-  
-  
   activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
                                                activity_threshold = activity_threshold)
+  
+  # final data table
   out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
                          maven_experiment = maven_experiment) 
   
