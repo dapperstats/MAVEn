@@ -14,7 +14,7 @@ read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
 \item{maven_file}{MAVEn file in .csv format}
 }
 \value{
-
+MAVEn dataset with (baseline = T) or without (baseline = F) data.
 }
 \description{
 \code{read_maven} imports a MAVEn data with or without the baseline data (i.e. Chamber = 0).

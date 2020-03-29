@@ -7,6 +7,7 @@
 metabolism_diag(
   maven_raw,
   metabolism_summary_cycle,
+  maven_experiment = "",
   outdir = "output",
   out_filename = "MetabolismDiagnostic",
   out_filetype = ".png"
@@ -15,7 +16,10 @@ metabolism_diag(
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}
 
-\item{metabolism_summary_cycle}{Dataframe calculated by \code{summarize_metabolism} with the "by_cycle" type indicated.}
+\item{metabolism_summary_cycle}{Dataframe calculated by
+\code{summarize_metabolism} with the "by_cycle" type indicated.}
+
+\item{maven_experiment}{Experiment name. Applied to both figures and files.}
 
 \item{outdir}{Folder where figure should be stored.}
 
@@ -30,5 +34,6 @@ metabolism_diag(
 Visual diagnostic for metabolism data using MAVEn with baseline
 }
 \examples{
-metabolism_diag(maven_raw, metabolism_summary_cycle, outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png")
+metabolism_diag(maven_raw, metabolism_summary_cycle, 
+outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png")
 }

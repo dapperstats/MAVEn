@@ -2,10 +2,11 @@
 % Please edit documentation in R/figures.R
 \name{plot_maven_overview}
 \alias{plot_maven_overview}
-\title{Plot MAVEn run data.}
+\title{Plot MAVEn experimental overview data.}
 \usage{
 plot_maven_overview(
   maven_raw,
+  maven_experiment = "",
   outdir = "output",
   out_filename = "ExpOverview",
   out_filetype = ".png"
@@ -13,6 +14,8 @@ plot_maven_overview(
 }
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}
+
+\item{maven_experiment}{Experiment name. Applied to both figures and files.}
 
 \item{outdir}{Folder where figure should be stored.}
 

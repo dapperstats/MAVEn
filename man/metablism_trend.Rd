@@ -2,17 +2,21 @@
 % Please edit documentation in R/figures.R
 \name{metablism_trend}
 \alias{metablism_trend}
-\title{Plot fly metabolism trends.}
+\title{Plot animal metabolism trends.}
 \usage{
 metablism_trend(
-  fly_metabolism,
+  animal_metabolism,
+  maven_experiment = "",
   outdir = "output",
   out_filename = "MetabolismTrends",
   out_filetype = ".png"
 )
 }
 \arguments{
-\item{fly_metabolism}{Fly metabolism dataframe extracted from the MAVEn without baseline using \code{extract_metabolism}.}
+\item{animal_metabolism}{animal metabolism dataframe extracted from the MAVEn
+without baseline using \code{extract_metabolism}.}
+
+\item{maven_experiment}{Experiment name. Applied to both figures and files.}
 
 \item{outdir}{Folder where figure should be stored.}
 
@@ -24,9 +28,11 @@ metablism_trend(
 
 }
 \description{
-\code{metabolism_trend} graphcially displays the fly metabolism data by chamber. The data are adjusted to a standardized measurement reading for illustration.
+\code{metabolism_trend} graphcially displays the animal metabolism data by
+chamber. The data are adjusted to a standardized measurement reading for
+illustration.
 }
 \examples{
-metablism_trend(fly_metabolism, outdir = "output", 
+metablism_trend(animal_metabolism, outdir = "output",
 out_filename = "", out_filetype = ".png")
 }
