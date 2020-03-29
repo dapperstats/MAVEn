@@ -6,8 +6,7 @@
 #' @param maven_file MAVEn file in .csv format
 #' @param baseline Toggle option to include baseline data. Default is `FALSE`
 #'
-#' @return 
-#' @export
+#' @return MAVEn dataset with (baseline = T) or without (baseline = F) data.
 #'
 #' @examples 
 #' # import with baseline data

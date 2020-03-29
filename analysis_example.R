@@ -10,12 +10,14 @@
 ####
 
 ## Overview
-# Evaluation of the MAVEn datafiles can be completed in one of two ways: either step by step as outlines below or with the function `evaluate_maven` which will provide all graphics and tables for a single experimental run.
+# Evaluation of the MAVEn datafiles can be completed in one of two ways: either
+# step by step as outlines below or with the function `evaluate_maven` which
+# will provide all graphics and tables for a single experimental run.
 #
 # Things to still be completed:
 #   - What additional information about the experiment needs to be recorded?
-#   - Calculating fly activity with the absolute difference sums
-#   - Visual diagnostic for the fly metabolism data
+#   - Calculating animal activity with the absolute difference sums
+#   - Visual diagnostic for the animal metabolism data
 #   - Finalizing output datatable with experimental information, additional calculations
 
 
@@ -47,7 +49,7 @@ maven.cycle <- assign_cyclenumber(maven)
 
 # Step 3a: Extract the metabolism data from the dataset ----
 
-fly_metabolism <- extract_metabolism(maven.cycle)
+animal_metabolism <- extract_metabolism(maven.cycle)
 
 
 # Step 3b: Visualize the trend data to check for issues in measurements ----
@@ -62,10 +64,10 @@ fly_metabolism <- extract_metabolism(maven.cycle)
 # Because these plots are generated with the ggplot2 package, you can save each
 #  as an object and modify as you wish with themes, colors, etc. 
 
-metablism_trend(fly_metabolism, maven_experiment = "maven.example1")
+metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
 
 
-# Step 4: Produce a summary table for fly metabolism ----
+# Step 4: Produce a summary table for animal metabolism ----
 #
 # `summarize_metabolism` currently allows the user to create a table for all 
 #  data ("by_cycle") or summarized by chamber ("by_chamber"). 
@@ -73,11 +75,11 @@ metablism_trend(fly_metabolism, maven_experiment = "maven.example1")
 # We can add additional functionality that would automatically save the data 
 #  output.
 
-metabolism_summary_cycle <- summarize_metabolism(fly_metabolism, type = "by_cycle")
+metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, type = "by_cycle")
 
 # generate summary table by chamber
 
-metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, type = "by_chamber")
+metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, type = "by_chamber")
 
 
 # Step 5: Visual diagnostic of calculated data on raw data ----
@@ -92,7 +94,7 @@ metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, type = "by_ch
 metabolism_diag(maven_raw, metabolism_summary_cycle, maven_experiment = "maven.example1")
 
 
-# Step 6a: Extract fly activity data based on metabolism calculations ----
+# Step 6a: Extract animal activity data based on metabolism calculations ----
 #
 # `extract_activity` requires the user to input an interval (measured in 
 #   seconds) and a threshold activity level. Given the variability in  
@@ -100,147 +102,46 @@ metabolism_diag(maven_raw, metabolism_summary_cycle, maven_experiment = "maven.e
 #   select a value no longer than 60 seconds (within the CO2 measurement 
 #   interval)
 
-fly_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
-                                interval= 60, threshold = 0.01)
+animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
+                                interval = 60, activity_baseline = 0.01)
 
-# Step 6b: Plot fly activity ----
+# Step 6b: Plot animal activity ----
 #
 # These plots are again, standardized by the measurement number
 
-activity_trend(fly_activity, maven_experiment = "maven.example1")
+activity_trend(animal_activity, maven_experiment = "maven.example1")
 
 
-# Step 7: Generate fly activity summary tables ----
+# Step 7: Generate animal activity summary tables ----
 #
 # There is currently no calculation for the abs difference sum, but that can be 
 # added into the pipeline.
-activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle")
-activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
+activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
+                                             activity_threshold = 1)
+activity_summary_chamber <- summarize_activity(animal_activity, type = "by_chamber")
 
-# [WIP] Step 8: Visual diagnostic of fly activity ----
 
-# [WIP] Step 9: Create the finalized data table ----
+# Step 8: Visual diagnostic of animal activity ----
+activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
+              maven_experiment = "maven.example1", interval = 60)
+
+
+# Step 9: Create the finalized data table ----
 #
 # create data table for analysis purposes
 
-test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle) 
+test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
+                            maven_experiment = "maven.example1") 
 
-activity_threshold <- 0.1
-test.out_summary <- test.out %>% 
-  mutate(mean_activity = replace_na(mean_activity, 0),
-         activity_state = ifelse(mean_activity >= activity_threshold, 
-                                 "Active", "Inactive"))
 
-ggplot(test.out_summary, aes(x = activity_state, y = median_co2_ul.h)) +
+ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
   geom_boxplot() + 
-  geom_point(position = position_jitter(width = .2)) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.7)) +
   labs(title = "Activity State", x = "", y = expression(Median~CO[2]~(mu*L~h^-1)))
 
 
-## [WIP] Complete analysis workflow ----
-evaluate_maven(maven_datafile = "maven_output.csv", maven_experiment = "test.evaluate")
+## Complete analysis workflow ----
+evaluate_maven(maven_datafile = "maven_output.csv", maven_experiment = "test.evaluate",
+               activity_baseline = 0.01, activity_threshold = 1)
 
-
-
-## Workflow example 2
-
-## Evaluate the experimental timecourse ----
-
-maven_raw <- read_maven(maven_datafile = 
-                          "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", 
-                        baseline = T)
-plot_maven_overview(maven_raw, maven_experiment = "maven.example2")
-
-##  Data processing pipeline ----
-
-# Step 1: load the MAVEn dataset without baseline ----
-#  for workflow processing by toggling the baseline parameter.
-
-maven <- read_maven(maven_datafile = 
-                      "./MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", 
-                    baseline = F)
-
-
-# Step 2: Assign a cycle number to the data ----
-#
-# This function is responsive to where the instrument begins its readings
-#  and will assign the start of a cycle to Chamber 1
-
-maven.cycle <- assign_cyclenumber(maven)
-
-
-# Step 3a: Extract the metabolism data from the dataset ----
-
-fly_metabolism <- extract_metabolism(maven.cycle)
-
-
-# Step 3b: Visualize the trend data to check for issues in measurements ----
-#
-# The `extract_metabolism` function has standardized the time course to a 
-#  measurement number (Second - min(Second)) to produce a consistent 
-#  visualization of the data by cycle. 
-#
-# There are additional parameters added for saving the graphical output if 
-#  needed. The default is to save a png named `MetabolismTrends.png`.
-#
-# Because these plots are generated with the ggplot2 package, you can save each
-#  as an object and modify as you wish with themes, colors, etc. 
-
-metablism_trend(fly_metabolism, maven_experiment = "maven.example2")
-
-
-# Step 4: Produce a summary table for fly metabolism ----
-#
-# `summarize_metabolism` currently allows the user to create a table for all 
-#  data ("by_cycle") or summarized by chamber ("by_chamber"). 
-#
-# We can add additional functionality that would automatically save the data 
-#  output.
-
-metabolism_summary_cycle <- summarize_metabolism(fly_metabolism, 
-                                                 type = "by_cycle")
-
-# generate summary table by chamber
-
-metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, 
-                                                   type = "by_chamber")
-
-
-# Step 5: Visual diagnostic of calculated data on raw data ----
-#
-# Using the MAVEn output with baseline (generated by baseline = T) as the base, 
-#  `metabolism_diag` plots the median measurement time and median metabolism 
-#  value onto the raw data for quick visual confirmation that the data 
-#  calculated match the raw data.
-#
-# This figure also saves the graphic by default as `MetabolismDiagnostics.png`
-
-metabolism_diag(maven_raw, metabolism_summary_cycle, 
-                maven_experiment = "maven.example2")
-
-
-# Step 6a: Extract fly activity data based on metabolism calculations ----
-#
-# `extract_activity` requires the user to input an interval (measured in 
-#   seconds) and a threshold activity level. Given the variability in  
-#   where the instrument starts measurements, it is recommended to 
-#   select a value no longer than 60 seconds (within the CO2 measurement 
-#   interval)
-
-fly_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
-                                 interval = 60, threshold = 0.01)
-
-# Step 6b: Plot fly activity ----
-#
-# These plots are again, standardized by the measurement number
-
-activity_trend(fly_activity, maven_experiment = "maven.example2")
-
-
-# Step 7: Generate fly activity summary tables ----
-#
-# There is currently no calculation for the abs difference sum, but that can be 
-# added into the pipeline.
-activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle")
-activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
 

@@ -5,3 +5,8 @@ data/
 .Rproj.user
 
 docs/
+
+output/
+.RData
+.Rhistory
+inst/doc
