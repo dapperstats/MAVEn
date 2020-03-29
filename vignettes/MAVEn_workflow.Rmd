@@ -20,6 +20,16 @@ library(MAVEn)
 ```
 ## Overview
 
+1. Data are loaded into the space using `read_maven`, which removes all baseline data from the dataset prior to processing.
+
+2. Cycle numbers are assigned to the data using `cycle_number` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn dataset with appended cycle numbers.
+
+3. The complete dataset is then deconstructed into a dataset for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
+
+4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. These functions make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 30 sec) and an activity state based on a given threshold. 
+
+5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO2, and activity for a MAVEn run. 
+
 Evaluation of the MAVEn datafiles can be completed in one of two ways: either step by step as outlines below or with the function `evaluate_maven` which will provide all graphics and tables for a single experimental run.
 
 ## Workflow example 1 ----
