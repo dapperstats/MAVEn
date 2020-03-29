@@ -16,8 +16,8 @@
 #
 # Things to still be completed:
 #   - What additional information about the experiment needs to be recorded?
-#   - Calculating fly activity with the absolute difference sums
-#   - Visual diagnostic for the fly metabolism data
+#   - Calculating animal activity with the absolute difference sums
+#   - Visual diagnostic for the animal metabolism data
 #   - Finalizing output datatable with experimental information, additional calculations
 
 
@@ -49,7 +49,7 @@ maven.cycle <- assign_cyclenumber(maven)
 
 # Step 3a: Extract the metabolism data from the dataset ----
 
-fly_metabolism <- extract_metabolism(maven.cycle)
+animal_metabolism <- extract_metabolism(maven.cycle)
 
 
 # Step 3b: Visualize the trend data to check for issues in measurements ----
@@ -64,14 +64,14 @@ fly_metabolism <- extract_metabolism(maven.cycle)
 # Because these plots are generated with the ggplot2 package, you can save each
 #  as an object and modify as you wish with themes, colors, etc. 
 
-metablism_trend(fly_metabolism, maven_experiment = "maven.example1")
+metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
 
-p <- metablism_trend(fly_metabolism, maven_experiment = "maven.example1")
+p <- metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
 
 p + theme_bw() + geom_line()
 
 
-# Step 4: Produce a summary table for fly metabolism ----
+# Step 4: Produce a summary table for animal metabolism ----
 #
 # `summarize_metabolism` currently allows the user to create a table for all 
 #  data ("by_cycle") or summarized by chamber ("by_chamber"). 
@@ -79,11 +79,11 @@ p + theme_bw() + geom_line()
 # We can add additional functionality that would automatically save the data 
 #  output.
 
-metabolism_summary_cycle <- summarize_metabolism(fly_metabolism, type = "by_cycle")
+metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, type = "by_cycle")
 
 # generate summary table by chamber
 
-metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, type = "by_chamber")
+metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, type = "by_chamber")
 
 
 # Step 5: Visual diagnostic of calculated data on raw data ----
@@ -98,7 +98,7 @@ metabolism_summary_chamber <- summarize_metabolism(fly_metabolism, type = "by_ch
 metabolism_diag(maven_raw, metabolism_summary_cycle, maven_experiment = "maven.example1")
 
 
-# Step 6a: Extract fly activity data based on metabolism calculations ----
+# Step 6a: Extract animal activity data based on metabolism calculations ----
 #
 # `extract_activity` requires the user to input an interval (measured in 
 #   seconds) and a threshold activity level. Given the variability in  
@@ -106,26 +106,26 @@ metabolism_diag(maven_raw, metabolism_summary_cycle, maven_experiment = "maven.e
 #   select a value no longer than 60 seconds (within the CO2 measurement 
 #   interval)
 
-fly_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
+animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
                                 interval = 60, activity_baseline = 0.01)
 
-# Step 6b: Plot fly activity ----
+# Step 6b: Plot animal activity ----
 #
 # These plots are again, standardized by the measurement number
 
-activity_trend(fly_activity, maven_experiment = "maven.example1")
+activity_trend(animal_activity, maven_experiment = "maven.example1")
 
 
-# Step 7: Generate fly activity summary tables ----
+# Step 7: Generate animal activity summary tables ----
 #
 # There is currently no calculation for the abs difference sum, but that can be 
 # added into the pipeline.
-activity_summary_cycle <- summarize_activity(fly_activity, type = "by_cycle", 
+activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
                                              activity_threshold = 5)
-activity_summary_chamber <- summarize_activity(fly_activity, type = "by_chamber")
+activity_summary_chamber <- summarize_activity(animal_activity, type = "by_chamber")
 
 
-# Step 8: Visual diagnostic of fly activity ----
+# Step 8: Visual diagnostic of animal activity ----
 activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
               maven_experiment = "maven_test", interval = 60)
 
