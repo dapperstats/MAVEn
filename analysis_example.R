@@ -68,7 +68,7 @@ animal_metabolism <- extract_metabolism(maven.cycle)
 # Because these plots are generated with the ggplot2 package, you can save each
 #  as an object and modify as you wish with themes, colors, etc. 
 
-metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
+metabolism_trend(animal_metabolism, maven_experiment = "maven.example1")
 
 
 # Step 4: Produce a summary table for animal metabolism ----
