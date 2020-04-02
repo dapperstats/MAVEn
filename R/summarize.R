@@ -10,6 +10,10 @@
 #'
 #' @return
 #' @export
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom dplyr left_join
+#' @importFrom utils write.csv
 #'
 #' @examples maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
 #' outdir = "output", out_filename = "ExperimentSummaryTable", maven_experiment = "")
@@ -37,6 +41,10 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
 #'
 #' @return
 #' @export
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by summarize
+#' @importFrom stats median sd
 #'
 #' @examples 
 #' summarize_metabolism(animal_metabolism, type = "by_cycle")
@@ -75,6 +83,10 @@ summarize_metabolism <- function(animal_metabolism, type = "") {
 #'
 #' @return
 #' @export
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by summarize mutate
+#' @importFrom stats median sd
 #'
 #' @examples 
 #' summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
