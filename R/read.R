@@ -3,11 +3,11 @@
 #' \code{read_maven} imports a MAVEn data with or without the baseline data (i.e. Chamber = 0). 
 #' 
 #' @param datadir Directory where data is stored
-#' @param maven_file MAVEn file in .csv format
+#' @param maven_datafile MAVEn file in .csv format
 #' @param baseline Toggle option to include baseline data. Default is `FALSE`
 #'
 #' @return MAVEn dataset with (baseline = T) or without (baseline = F) data.
-#'
+#'  
 #' @examples 
 #' # import with baseline data
 #' maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)
