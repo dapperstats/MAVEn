@@ -7,7 +7,7 @@
 maven_datatable(
   metabolism_summary_cycle,
   activity_summary_cycle,
-  outdir = "output",
+  outdir = NULL,
   out_filename = "ExperimentSummaryTable",
   maven_experiment = ""
 )

@@ -7,7 +7,7 @@
 activity_trend(
   animal_activity,
   maven_experiment = "",
-  outdir = "output",
+  outdir = NULL,
   out_filename = "ActivityTrends",
   out_filetype = ".png"
 )

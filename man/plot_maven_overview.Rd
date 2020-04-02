@@ -7,7 +7,7 @@
 plot_maven_overview(
   maven_raw,
   maven_experiment = "",
-  outdir = "output",
+  outdir = NULL,
   out_filename = "ExpOverview",
   out_filetype = ".png"
 )

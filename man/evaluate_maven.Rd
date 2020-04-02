@@ -6,7 +6,7 @@
 \usage{
 evaluate_maven(
   datadir = "",
-  outdir = "",
+  outdir = NULL,
   maven_datafile = "./maven_output.csv",
   maven_experiment = "",
   interval = 60,

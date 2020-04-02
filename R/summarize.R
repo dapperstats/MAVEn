@@ -19,18 +19,19 @@
 #' #outdir = "output", out_filename = "ExperimentSummaryTable", 
 #' #maven_experiment = "experiment")
 maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
-                            outdir = "output", 
+                            outdir = NULL, 
                             out_filename = "ExperimentSummaryTable", 
                             maven_experiment = "") {
     
     table <- metabolism_summary_cycle %>% 
         left_join(activity_summary_cycle, by = c("Chamber", "cycle"))
     
+    if(!is.null(outdir)){
     outpath <- file.path(outdir, 
                          out_filename = paste0(Sys.Date(),"_", 
                                                maven_experiment, "_",
                                                out_filename, ".csv"))
-    write.csv(table, file = outpath, row.names = F)
+    write.csv(table, file = outpath, row.names = F)}
     
     return(table)
 }

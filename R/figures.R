@@ -18,14 +18,8 @@
 #' 
 #' @export
 plot_maven_overview <- function(maven_raw, maven_experiment = "",
-                                outdir = "output", out_filename = "ExpOverview",
+                                outdir = NULL, out_filename = "ExpOverview",
                                 out_filetype = ".png") {
-  
-  fpath <- file.path(outdir)
-  
-  if(!dir.exists(fpath)){
-    dir.create(fpath)
-  }
   
   experiment <- maven_raw %>% 
     select(Seconds, TC1, FRC_mlmin, CO2ppm, Chamber) %>% 
@@ -43,12 +37,20 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
     theme(plot.title.position = "plot", 
           plot.caption.position =  "plot")
   
-  outpath <- file.path(outdir, 
-                       out_filename = paste0(Sys.Date(),"_",maven_experiment, 
-                                             "_", out_filename, out_filetype))
-  
-  ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-         width = 4, height = 4)
+  if(!is.null(outdir)){
+    fpath <- file.path(outdir)
+    
+    if(!dir.exists(fpath)){
+      dir.create(fpath)
+    }
+    
+    outpath <- file.path(outdir, 
+                         out_filename = paste0(Sys.Date(),"_",maven_experiment, 
+                                               "_", out_filename, out_filetype))
+    
+    ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
+           width = 4, height = 4)
+  }
   
   return(p)
 }
@@ -74,10 +76,10 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
 #' @return
 #' @export
 #'
-#' @examples #metablism_trend(animal_metabolism, outdir = "output",
+#' @examples #metabolism_trend(animal_metabolism, outdir = "output",
 #' #out_filename = "", out_filetype = ".png")
-metablism_trend <- function(animal_metabolism, maven_experiment = "",
-                            outdir = "output", out_filename = "MetabolismTrends",
+metabolism_trend <- function(animal_metabolism, maven_experiment = "",
+                            outdir = NULL, out_filename = "MetabolismTrends",
                             out_filetype = ".png") {
   
   p <- ggplot(data = animal_metabolism %>% 
@@ -94,12 +96,14 @@ metablism_trend <- function(animal_metabolism, maven_experiment = "",
           plot.title.position = "plot", 
           plot.caption.position =  "plot")
   
+  if(!is.null(outdir)){
   outpath <- file.path(outdir, 
-                       out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
+                       out_filename = paste0(Sys.Date(),"_",
+                                             maven_experiment, "_",
                                              out_filename, out_filetype))
   
   ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-         width = 7, height = 4)
+         width = 7, height = 4)}
   
   return(p)
 }
@@ -127,7 +131,7 @@ metablism_trend <- function(animal_metabolism, maven_experiment = "",
 #' #out_filetype = ".png")
 metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
                             maven_experiment = "",
-                            outdir = "output", 
+                            outdir = NULL, 
                             out_filename = "MetabolismDiagnostic",
                             out_filetype = ".png") {
   
@@ -157,13 +161,14 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
           plot.title.position = "plot", 
           plot.caption.position =  "plot")
   
+  if(!is.null(outdir)){
   outpath <- file.path(outdir, 
                        out_filename = paste0(Sys.Date(),"_",
                                              maven_experiment, "_",
                                              out_filename, out_filetype))
   
   ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-         width = 4, height = 8)
+         width = 4, height = 8)}
   
   return(p)
   
@@ -188,7 +193,7 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' #activity_trend(animal_activity, maven_experiment = "maven.example1")
 activity_trend <- function(animal_activity, 
                            maven_experiment = "",
-                           outdir = "output", 
+                           outdir = NULL, 
                            out_filename = "ActivityTrends", 
                            out_filetype = ".png") {
   
@@ -205,13 +210,14 @@ activity_trend <- function(animal_activity,
           plot.title.position = "plot", 
           plot.caption.position =  "plot")
   
+  if(!is.null(outdir)){
   outpath <- file.path(outdir, 
                        out_filename = paste0(Sys.Date(),"_", 
                                              maven_experiment, "_",
                                              out_filename, out_filetype))
   
   ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-         width = 7, height = 4)
+         width = 7, height = 4)}
   
   return(p)
 }
@@ -243,7 +249,7 @@ activity_diag <- function(maven_raw = "",
                           metabolism_summary_cycle = "",
                           activity_summary_cycle = "",
                           interval = 120,
-                          outdir = "output",
+                          outdir = NULL,
                           maven_experiment = "",
                           out_filename = "ActivityDiagnostic",
                           out_filetype = ".png") {
@@ -302,15 +308,16 @@ activity_diag <- function(maven_raw = "",
     scale_color_brewer(palette = "Dark2")
   
   p.merge <- plot_grid(p.met, p, ncol = 2, align = "hv", axis = "tb",
-                       rel_widths = c(0.5,2))
+                       rel_widths = c(0.75,2))
   
+  if(!is.null(outdir)){
   outpath <- file.path(outdir,
                        out_filename = paste0(Sys.Date(),"_",
                                              maven_experiment, "_",
                                              out_filename, out_filetype))
   
   ggsave(p.merge, filename = outpath, dpi = 300, scale = 1.5,
-         width = 6, height = 8)
+         width = 6, height = 8)}
   
   return(p.merge)
 }

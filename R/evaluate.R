@@ -12,7 +12,7 @@
 #' @return
 #' @export
 #'
-evaluate_maven <- function(datadir = "", outdir = "",
+evaluate_maven <- function(datadir = "", outdir = NULL,
                            maven_datafile = "./maven_output.csv", 
                            maven_experiment = "", 
                            interval = 60, 

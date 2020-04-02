@@ -9,7 +9,7 @@ activity_diag(
   metabolism_summary_cycle = "",
   activity_summary_cycle = "",
   interval = 120,
-  outdir = "output",
+  outdir = NULL,
   maven_experiment = "",
   out_filename = "ActivityDiagnostic",
   out_filetype = ".png"
