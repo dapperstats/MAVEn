@@ -4,10 +4,14 @@
 #'integrated MAVEn dataset. It applies a measurement adjustment to the time
 #'series for visualization with \code{metabolism_trend}.
 #'
-#'@param maven.cycle MAVEn dataset with cycles assigned. Must apply
+#' @param maven.cycle MAVEn dataset with cycles assigned. Must apply
 #'  \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
 #'
-#'@return Extracted animal metabolism data.
+#' @return Extracted animal metabolism data.
+#'
+#' @importFrom dplyr select filter arrange group_by mutate
+#' @importFrom tidyr pivot_longer
+#' @importFrom magrittr %>%
 #'
 #' @examples extract_metabolism(maven)
 extract_metabolism <- function(maven.cycle) {
@@ -44,6 +48,10 @@ extract_metabolism <- function(maven.cycle) {
 #'
 #' @return Extracted animal activity dataset with median time and activity
 #'   start/end times.
+#'
+#' @importFrom dplyr mutate select left_join group_by filter 
+#' @importFrom tidyr pivot_longer
+#' @importFrom magrittr %>%
 #'
 #' @examples extract_activity(maven.cycle, metabolism_summary_cycle, 
 #' interval = 60, activity_baseline = 0.01)
