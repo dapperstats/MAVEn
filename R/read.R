@@ -7,7 +7,11 @@
 #' @param baseline Toggle option to include baseline data. Default is `FALSE`
 #'
 #' @return MAVEn dataset with (baseline = T) or without (baseline = F) data.
-#'  
+#' 
+#' @importFrom utils read.csv
+#' @importFrom magrittr %>%
+#' @importFrom dplyr filter rename
+#' 
 #' @examples 
 #' # import with baseline data
 #' maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)
