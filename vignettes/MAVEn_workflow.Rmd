@@ -11,13 +11,12 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
-```
+  comment = "#>")
 
-```{r setup}
+options(repos="https://cran.rstudio.com" )
 library(MAVEn)
 ```
+
 ## Overview
 
 1. Data are loaded into the space using `read_maven`, which removes all baseline data from the dataset prior to processing.
@@ -38,8 +37,7 @@ Evaluation of the MAVEn datafiles can be completed in one of two ways: either st
 # The experimental overview is currently based on 4 pre-selected columns from the previous code, but can be updated to include other functionality that would allow the user to select whichever columns are of interest for graphically viewing the experimental run
 
 ## Evaluate the experimental timecourse ----
-
-maven_raw <- read_maven(maven_datafile = "./maven_output.csv", baseline = T)
+maven_raw <- read_maven(datadir = "data", maven_datafile = "./maven_output.csv", baseline = T)
 plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
 ```
 
