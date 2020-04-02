@@ -5,11 +5,11 @@
 \title{Visual diagnostic for activity data using MAVEn with baseline}
 \usage{
 activity_diag(
-  maven_raw,
-  metabolism_summary_cycle,
-  activity_summary_cycle,
+  maven_raw = "",
+  metabolism_summary_cycle = "",
+  activity_summary_cycle = "",
   interval = 120,
-  outdir = "output",
+  outdir = NULL,
   maven_experiment = "",
   out_filename = "ActivityDiagnostic",
   out_filetype = ".png"
@@ -34,15 +34,6 @@ activity_diag(
 
 \item{out_filetype}{Figure file type.}
 }
-\value{
-
-}
 \description{
 Visual diagnostic for activity data using MAVEn with baseline
-}
-\examples{
-activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
-maven_experiment = "maven_example",
-outdir = "output", out_filename = "ActivityDiagnostic", 
-out_filetype = ".png")
 }

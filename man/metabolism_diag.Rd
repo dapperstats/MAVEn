@@ -8,7 +8,7 @@ metabolism_diag(
   maven_raw,
   metabolism_summary_cycle,
   maven_experiment = "",
-  outdir = "output",
+  outdir = NULL,
   out_filename = "MetabolismDiagnostic",
   out_filetype = ".png"
 )
@@ -34,6 +34,7 @@ metabolism_diag(
 Visual diagnostic for metabolism data using MAVEn with baseline
 }
 \examples{
-metabolism_diag(maven_raw, metabolism_summary_cycle, 
-outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png")
+#metabolism_diag(maven_raw, metabolism_summary_cycle, 
+#outdir = "output", out_filename = "MetabolismDiagnostic", 
+#out_filetype = ".png")
 }

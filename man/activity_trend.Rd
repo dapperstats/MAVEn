@@ -7,7 +7,7 @@
 activity_trend(
   animal_activity,
   maven_experiment = "",
-  outdir = "output",
+  outdir = NULL,
   out_filename = "ActivityTrends",
   out_filetype = ".png"
 )
@@ -24,14 +24,10 @@ baseline using \code{extract_activity}.}
 
 \item{out_filetype}{Figure file type.}
 }
-\value{
-
-}
 \description{
 \code{activity_trend} graphcially displays the animal activity data by chamber.
 The data are adjusted to a standardized measurement reading for illustration.
 }
 \examples{
-activity_trend(animal_activity outdir = "output",
-out_filename = "", out_filetype = ".png")
+#activity_trend(animal_activity, maven_experiment = "maven.example1")
 }

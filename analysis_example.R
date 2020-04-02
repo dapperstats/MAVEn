@@ -18,13 +18,17 @@
 #   - What additional information about the experiment needs to be recorded?
 #   - Calculating animal activity with the absolute difference sums
 #   - Visual diagnostic for the animal metabolism data
-#   - Finalizing output datatable with experimental information, additional calculations
+#   - Finalizing output datatable with experimental information, additional 
+#     calculations
 
+library(MAVEn)
 
 ## Workflow example 1 ----
 
-# load the raw MAVEn dataset with baseline data
-# The experimental overview is currently based on 4 pre-selected columns from the previous code, but can be updated to include other functionality that would allow the user to select whichever columns are of interest for graphically viewing the experimental run
+# load the raw MAVEn dataset with baseline data The experimental overview is
+# currently based on 4 pre-selected columns from the previous code, but can be
+# updated to include other functionality that would allow the user to select
+# whichever columns are of interest for graphically viewing the experimental run
 
 ## Evaluate the experimental timecourse ----
 
@@ -64,7 +68,7 @@ animal_metabolism <- extract_metabolism(maven.cycle)
 # Because these plots are generated with the ggplot2 package, you can save each
 #  as an object and modify as you wish with themes, colors, etc. 
 
-metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
+metabolism_trend(animal_metabolism, maven_experiment = "maven.example1")
 
 
 # Step 4: Produce a summary table for animal metabolism ----
@@ -75,11 +79,13 @@ metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
 # We can add additional functionality that would automatically save the data 
 #  output.
 
-metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, type = "by_cycle")
+metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, 
+                                                 type = "by_cycle")
 
 # generate summary table by chamber
 
-metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, type = "by_chamber")
+metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, 
+                                                   type = "by_chamber")
 
 
 # Step 5: Visual diagnostic of calculated data on raw data ----
@@ -91,7 +97,8 @@ metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, type = "by
 #
 # This figure also saves the graphic by default as `MetabolismDiagnostics.png`
 
-metabolism_diag(maven_raw, metabolism_summary_cycle, maven_experiment = "maven.example1")
+metabolism_diag(maven_raw, metabolism_summary_cycle, 
+                maven_experiment = "maven.example1")
 
 
 # Step 6a: Extract animal activity data based on metabolism calculations ----
@@ -116,9 +123,11 @@ activity_trend(animal_activity, maven_experiment = "maven.example1")
 #
 # There is currently no calculation for the abs difference sum, but that can be 
 # added into the pipeline.
-activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
+activity_summary_cycle <- summarize_activity(animal_activity, 
+                                             type = "by_cycle", 
                                              activity_threshold = 1)
-activity_summary_chamber <- summarize_activity(animal_activity, type = "by_chamber")
+activity_summary_chamber <- summarize_activity(animal_activity, 
+                                               type = "by_chamber")
 
 
 # Step 8: Visual diagnostic of animal activity ----
@@ -136,12 +145,16 @@ test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
 
 ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
   geom_boxplot() + 
-  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.7)) +
-  labs(title = "Activity State", x = "", y = expression(Median~CO[2]~(mu*L~h^-1)))
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, 
+                                             dodge.width = 0.7)) +
+  labs(title = "Activity State", 
+       x = "", 
+       y = expression(Median~CO[2]~(mu*L~h^-1)))
 
 
 ## Complete analysis workflow ----
-evaluate_maven(maven_datafile = "maven_output.csv", maven_experiment = "test.evaluate",
+evaluate_maven(maven_datafile = "maven_output.csv", 
+               maven_experiment = "test.evaluate",
                activity_baseline = 0.01, activity_threshold = 1)
 
 

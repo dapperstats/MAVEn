@@ -1,152 +1,300 @@
 ---
 title: "MAVEn_workflow"
-author: Megan L. Larsen
+author: Megan L. Larsen & Juniper L. Simonis
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{MAVEn_workflow}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+
 ```
 
-```{r setup}
+```{r, include = FALSE}
+
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+
+depend <- c("ggplot2", "pander", "tidyr")
+ndepend <- length(depend)
+present <- installed.packages()[, "Package"]
+needed <- depend[!(depend %in% present)]
+n_needed <- length(needed)
+
+if (n_needed > 0) {
+    install.packages(needed)
+}
+
+for (i in 1:ndepend) {
+    suppressMessages(eval(bquote(library(.(depend[i])))))
+}
+
+
+```
+
+
+```{r}
+
 library(MAVEn)
+
 ```
-## Overview
 
-1. Data are loaded into the space using `read_maven`, which removes all baseline data from the dataset prior to processing.
+# Overview
 
-2. Cycle numbers are assigned to the data using `cycle_number` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn dataset with appended cycle numbers.
+MAVEn data are exported from the instrument as a large table of instrument, CO<sub>2</sub>, and activity data for animals across 16 chambers. Here, we demonstrate a workflow pipeline for evaluating MAVEn metabolism and activity data with flexibility in calculating animal activity status. 
 
-3. The complete dataset is then deconstructed into a dataset for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
+There are two workflow strategies: (1) one that leverages all the functionality within the code base to work through and evaluate data in a step wise fashion and (2) one that integrates all the package functions into a single function, `evaluate_maven`, for fast data proc. Both are outlined below. 
 
-4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. These functions make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 30 sec) and an activity state based on a given threshold. 
+Functions are built on specific data, so it is imperative to make sure the information provided in each of the functions matches the function parameter. 
 
-5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO2, and activity for a MAVEn run. 
 
-Evaluation of the MAVEn datafiles can be completed in one of two ways: either step by step as outlines below or with the function `evaluate_maven` which will provide all graphics and tables for a single experimental run.
+## Data structure
 
-## Workflow example 1 ----
-```{r}
-# load the raw MAVEn dataset with baseline data
-# The experimental overview is currently based on 4 pre-selected columns from the previous code, but can be updated to include other functionality that would allow the user to select whichever columns are of interest for graphically viewing the experimental run
+Data are produced as a high-resolution time-series (1 second intervals) with instrument readings for connected probes (e.g. temperature, CO<sub>2</sub>, thermocouplers) and readings within the 16 chambers for CO<sub>2</sub> consumption and activity. 
+Instrument readings begin in whichever chamber was the last to be recorded in the previous instrument run. 
+The instrument defaults to a 120 second measurement per chamber, but it appears there is some variation in that measurement. 
+In addition, there are 180 second measurements for baseline data (Chamber 0) collected in between readings for Chamber 16 and Chamber 1. 
 
-## Evaluate the experimental timecourse ----
 
-maven_raw <- read_maven(maven_datafile = "./maven_output.csv", baseline = T)
+# Workflow pipeline
+## Overview steps
+
+1. Data are loaded into the space using `read_maven`, which removes all baseline data from the data set prior to processing.
+
+2. Cycle numbers are assigned to the data using `assign_cyclenumber` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn data set with appended cycle numbers and is responsive to the chamber where the instrument started and stopped/
+
+3. The complete data set is then deconstructed into a data set for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
+
+4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. They make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 30 sec) and an activity state based on a given threshold. 
+
+5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO<sub>2</sub>, and activity for a MAVEn run. 
+
+
+## Instrument run overview
+
+Evaluating the experimental time course is a vital step to check for issues with chamber sealing or measurements that may impact the experiment. 
+
+Here, we read in the full MAVEn data set that includes the baseline data by toggling `baseline = T` in the `read_maven` function. 
+
+```{r loadRawData}
+
+maven_raw <- read_maven(datadir = "../data", 
+                        maven_datafile = "./maven_output.csv", baseline = T)
+tibble(maven_raw)
+
+```
+
+
+Raw data are imported into `plot_maven_overview` to produce four time series plots of the Chamber, instrument carbon dioxide (CO<sub>2</sub>) concentration (parts per million, ppm), flow rate (mL min<sup>-1</sub>) in the sample/animal chamber (FRC_mlmin), and thermocouple 1. 
+
+```{r plotOverview, fig.height = 6, fig.width = 6, out.width="70%"}
+
 plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
+
 ```
 
-#  Data processing pipeline ----
 
-**Step 1**: load the MAVEn dataset without baseline 
-```{r}
-#  for workflow processing by toggling the baseline parameter.
+## Processing MAVEn data
 
-maven <- read_maven(maven_datafile = "./maven_output.csv", baseline = F)
+### **Step 1**: Load the MAVEn data set without baseline  
+
+Baseline data from all downstream calculations, with the exception of the metabolism and activity visual diagnostics. However, if baseline data are required, simply change the baseline toggle to `TRUE`.
+
+```{r loadData}
+
+maven <- read_maven(datadir = "../data", 
+                    maven_datafile = "./maven_output.csv", baseline = F)
+tibble(maven)
 ```
 
-**Step 2**: Assign a cycle number to the data
 
-This function is responsive to where the instrument begins its readings and will assign the start of a cycle to Chamber 1
-```{r}
+### **Step 2**: Assign a cycle number to the data  
+
+Cycle numbers refer to the complete measurement of Chambers 1 - 16.
+When the instrument run is started, measurements begin in the chamber where the instrument run last finished rather than restarting with a baseline (Chamber 0) or Chamber 1. Measurements continue until the instrument run is terminated, which could occur in the middle of a chamber's measurement.
+Cycle assignment using `assign_cyclenumber` is responsive to those cases and will only assign a cycle number to data that are part of a complete cycle. 
+
+```{r assign-cyclenumber}
+
 maven.cycle <- assign_cyclenumber(maven)
+
+tibble(maven.cycle)
 ```
 
-**Step 3a**: Extract the metabolism data from the dataset ----
-```{r}
+
+### **Step 3a**: Extract the metabolism data from the data set
+
+Extracting information from the larger data set provides a mechanism to only use the critical pieces of information.
+Animal metabolism is associated with CO<sub>2</sub> production within a given chamber. 
+These data are extracted from the CO2_mlminFly1:CO2_mlminFly16 columns in cycle-assign MAVEn data set using `extract_metabolism`. 
+
+```{r exract-metabolism}
+
 animal_metabolism <- extract_metabolism(maven.cycle)
+
+tibble(animal_metabolism)
 ```
 
-**Step 3b**: Visualize the trend data to check for issues in measurements ----
+### **Step 3b**: Visualize the trend data to check for issues in measurements 
 
-The `extract_metabolism` function has standardized the time course to a measurement number (Second - min(Second)) to produce a consistent visualization of the data by cycle.
-There are additional parameters added for saving the graphical output if needed. The default is to save a png named `MetabolismTrends.png`.
-Because these plots are generated with the ggplot2 package, you can save each as an object and modify as you wish with themes, colors, etc.
+`extract_metabolism` also standardizes the time course readings to a measurement number (Second - min(Second)) to produce a consistent visualization of the data by cycle.
+There are additional parameters added for saving the graphical output if needed. By default, the image is saved as a `.png` named `MetabolismTrends.png`.
+These plots are generated with the ggplot2 package, which means they can be modified with themes, colors, etc. by assigning them to a value. 
 
-```{r}
-metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
+```{r plot-MetabolismTrend, fig.height = 6, fig.width = 7, out.width="70%"}
+
+metabolism_trend(animal_metabolism, maven_experiment = "maven.example1")
+
+```
+
+```{r plot-MetabolismTrend-options, fig.height = 6, fig.width = 7, out.width = "70%"}
+
+p <- metabolism_trend(animal_metabolism, maven_experiment = "maven.example1")
+p + scale_color_brewer(palette = "Dark2")
+
 ```
 
 
-**Step 4**: Produce a summary table for animal metabolism ----
-`summarize_metabolism` currently allows the user to create a table for all data ("by_cycle") or summarized by chamber ("by_chamber").
+### **Step 4**: Summarize animal metabolism
+
+Individual chamber readings by cycle and summarized readings for the entire instrument run can be created using `summarize_metabolism`. 
+To create a table for all data ("by_cycle") or summarized by chamber ("by_chamber").
 
 
-```{r}
-metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, type = "by_cycle")
+```{r summarize-metabolismcycle, echo = 1}
+metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, 
+                                                 type = "by_cycle")
 
-metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, type = "by_chamber")
+```
+
+```{r table-summarize-metabolismcycle, echo = FALSE}
+pander(head(metabolism_summary_cycle), table.split.table = Inf)
+```
+
+```{r summarize-metabolismchamber}
+
+metabolism_summary_chamber <- summarize_metabolism(animal_metabolism, 
+                                                   type = "by_chamber")
+```
+
+```{r table-summarize-metabolismchamber, echo = FALSE}
+pander(head(metabolism_summary_chamber), table.split.table = Inf)
 ```
 
 
-**Step 5**: Visual diagnostic of calculated data on raw data ----
+### **Step 5**: Visual diagnostic of calculated data on raw data
 
-Using the MAVEn output with baseline (generated by baseline = T) as the base, `metabolism_diag` plots the median measurement time and median metabolism value onto the raw data for quick visual confirmation that the data calculated match the raw data.
+Using the MAVEn output with baseline (generated by `baseline = T`) as the base, `metabolism_diag` plots the median measurement time and median metabolism value onto the raw data for quick visual confirmation that the data calculated match the raw data.  
 
 This figure also saves the graphic by default as `MetabolismDiagnostics.png`
 
-```{r}
-metabolism_diag(maven_raw, metabolism_summary_cycle, maven_experiment = "maven.example1")
+```{r plot-MetabolismDiag, fig.height = 10, fig.width = 7, out.width="70%"}
+
+metabolism_diag(maven_raw, metabolism_summary_cycle, 
+                maven_experiment = "maven.example1")
+
 ```
 
 
-**Step 6a**: Extract animal activity data based on metabolism calculations ----
+### **Step 6a**: Extract animal activity data based on metabolism calculations 
 
+CO2 measurements are recorded for 120 seconds while animal activity is continuously recorded during an experimental run. Thus, it would be possible to measure an animal's activity for longer than the CO2 measurement window in a specific chamber.
+However, because of how the instrument begins and ends an experimental run, having a consist number of activity readings outside the metabolism measurement may not be achievable. 
 `extract_activity` requires the user to input an interval (measured in seconds) and a threshold activity level. Given the variability in where the instrument starts measurements, it is recommended to select a value no longer than 60 seconds (within the CO2 measurement interval)
 
 ```{r}
+
 animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle,
                                 interval = 60, activity_baseline = 0.01)
+tibble(animal_activity) 
 ```
  
-**Step 6b**: Plot animal activity ----
+### **Step 6b**: Plot animal activity 
 
-```{r}
+As with the metabolism data, activity trends can also be plotted with the standardized measurement number. 
+
+```{r fig.height = 6, fig.width = 7, out.width="70%"}
+
 activity_trend(animal_activity, maven_experiment = "maven.example1")
+
 ```
 
 
-**Step 7**: Generate animal activity summary tables ----
+### **Step 7**: Generate animal activity summary tables
 
-There is currently no calculation for the abs difference sum, but that can be added into the pipeline.
-```{r}
-activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle",
+```{r summarize-activitycycle}
+
+activity_summary_cycle <- summarize_activity(animal_activity, 
+                                             type = "by_cycle",
                                              activity_threshold = 1)
-activity_summary_chamber <- summarize_activity(animal_activity, type = "by_chamber")
 ```
 
+```{r table-summarize-activitycycle, echo = FALSE}
 
-**Step 8:** Visual diagnostic of animal activity ----
-```{r}
+pander(head(activity_summary_cycle), table.split.table = Inf)
+
+```
+
+```{r summarize-activitychamber}
+
+activity_summary_chamber <- summarize_activity(animal_activity, 
+                                               type = "by_chamber")
+```
+
+```{r table-summarize-activitychamber, echo = FALSE}
+
+pander(head(activity_summary_chamber), table.split.table = Inf)
+
+```
+
+### **Step 8:** Visual diagnostic of animal activity
+
+Visual diagnostics for the animal activity data are presented with the median metabolism rates for each cycle within a chamber.
+
+The periods of activity measurements are indicated by a colored rectangle that specifies the calculated activity status of the animal at the time of measurement with respect to the selected activity threshold, set by the parameter `activity_threshold` in `activity_summary_cycle`.
+
+```{r plot-ActivityDiag, fig.height = 11, fig.width = 7, out.width="70%"}
+
 activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
               maven_experiment = "maven.example1", interval = 60)
+
 ```
 
 
-**Step 9**: Create the finalized data table ----
+### **Step 9**: Create the finalized data table
 
-```{r}
+```{r create-datafile}
+maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
+                            maven_experiment = "maven.example1")
+```
+
+```{r, eval = T, fig.width = 5, fig.height=5, out.width="70%"}
+
 test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
                             maven_experiment = "maven.example1")
 
 
 ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
   geom_boxplot() +
-  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.7)) +
-  labs(title = "Activity State", x = "", y = expression(Median~CO[2]~(mu*L~h^-1)))
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, 
+                                             dodge.width = 0.7)) +
+  labs(title = "Activity State", x = "", 
+       y = expression(Median~CO[2]~(mu*L~h^-1)))
 ```
 
-# Complete analysis workflow ----
 
-```{r}
-evaluate_maven(maven_datafile = "maven_output.csv", maven_experiment = "test.evaluate",
+## OPT2: Complete analysis workflow
+Using this single function, you can quickly and easily evaluate a MAVEn experiment without needing to interface with underlying functions. 
+
+```{r, eval = F}
+evaluate_maven(datadir = "../data",
+               maven_datafile = "maven_output.csv", 
+               maven_experiment = "test.evaluate",
                activity_baseline = 0.01, activity_threshold = 1)
 ```
 

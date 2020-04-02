@@ -3,9 +3,9 @@
 #' @param x list of CO2 values from MAVEn dataset
 #'
 #' @return
-#' @export
+#' 
+#' @importFrom stats median
 #'
-#' @examples
 co2_convertion_median <- function(x) {
     co2.ul.h <- median(x) * 1000 * 60
     return(co2.ul.h)
@@ -16,9 +16,7 @@ co2_convertion_median <- function(x) {
 #' @param x list of CO2 values from MAVEn dataset
 #'
 #' @return
-#' @export
 #'
-#' @examples
 co2_convertion <- function(x) {
     co2.ul.h <- x * 1000 * 60
     return(co2.ul.h)
@@ -27,12 +25,12 @@ co2_convertion <- function(x) {
 #' Standard error of the mean
 #'
 #' @param x list of values
-#' @param n 
+#' @param n number of cycles
 #'
 #' @return
-#' @export
+#' 
+#' @importFrom stats sd
 #'
-#' @examples
 sem <- function(x, n) {
     sem <- sd(x)/sqrt(n)
     return(sem)
@@ -41,13 +39,13 @@ sem <- function(x, n) {
 
 #' Lower confidence interval
 #'
-#' @param x 
-#' @param n 
+#' @param x list of values
+#' @param n number of cycles
 #'
 #' @return
-#' @export
+#' 
+#' @importFrom stats qt
 #'
-#' @examples
 lower.ci <- function(x, n) {
     lower.ci <- mean(x) - qt(1 - (0.05/2), n - 1) * sem(x, n)
     return(lower.ci)
@@ -56,13 +54,13 @@ lower.ci <- function(x, n) {
 
 #' Upper confidence interval
 #'
-#' @param x 
-#' @param n 
+#' @param x list of values
+#' @param n number of cycles
 #'
 #' @return
-#' @export
+#' 
+#' @importFrom stats qt
 #'
-#' @examples
 upper.ci <- function(x, n) {
     upper.ci <- mean(x) + qt(1 - (0.05/2), n - 1) * sem(x, n)
     return(upper.ci)

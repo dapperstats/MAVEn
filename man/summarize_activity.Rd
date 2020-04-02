@@ -21,6 +21,6 @@ baseline using \code{extract_activity}.}
 Summarize animal activity data.
 }
 \examples{
-summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
-summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
+#summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
+#summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
 }

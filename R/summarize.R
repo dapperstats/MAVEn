@@ -10,21 +10,28 @@
 #'
 #' @return
 #' @export
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom dplyr left_join
+#' @importFrom utils write.csv
 #'
-#' @examples maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
-#' outdir = "output", out_filename = "ExperimentSummaryTable", maven_experiment = "")
+#' @examples #maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
+#' #outdir = "output", out_filename = "ExperimentSummaryTable", 
+#' #maven_experiment = "experiment")
 maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
-                            outdir = "output", 
-                            out_filename = "ExperimentSummaryTable", maven_experiment = "") {
+                            outdir = NULL, 
+                            out_filename = "ExperimentSummaryTable", 
+                            maven_experiment = "") {
     
     table <- metabolism_summary_cycle %>% 
         left_join(activity_summary_cycle, by = c("Chamber", "cycle"))
     
+    if(!is.null(outdir)){
     outpath <- file.path(outdir, 
                          out_filename = paste0(Sys.Date(),"_", 
                                                maven_experiment, "_",
                                                out_filename, ".csv"))
-    write.csv(table, file = outpath, row.names = F)
+    write.csv(table, file = outpath, row.names = F)}
     
     return(table)
 }
@@ -37,10 +44,14 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
 #'
 #' @return
 #' @export
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by summarize
+#' @importFrom stats median sd
 #'
 #' @examples 
-#' summarize_metabolism(animal_metabolism, type = "by_cycle")
-#' summarize_metabolism(animal_metabolism, type = "by_chamber")
+#' #summarize_metabolism(animal_metabolism, type = "by_cycle")
+#' #summarize_metabolism(animal_metabolism, type = "by_chamber")
 summarize_metabolism <- function(animal_metabolism, type = "") {
     
     n_cycles <- as.numeric(max(animal_metabolism$cycle))
@@ -75,10 +86,14 @@ summarize_metabolism <- function(animal_metabolism, type = "") {
 #'
 #' @return
 #' @export
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by summarize mutate
+#' @importFrom stats median sd
 #'
 #' @examples 
-#' summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
-#' summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
+#' #summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
+#' #summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
 summarize_activity <- function(animal_activity, type = "", 
                                activity_threshold = "0.5") {
     

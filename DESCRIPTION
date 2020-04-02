@@ -8,14 +8,19 @@ Authors@R: as.person(c(
   ))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Depends: R (>= 3.2.3)
+License: MIT + file license
 Encoding: UTF-8
 LazyData: true
 Imports: 
     dplyr,
-    ggplot2
+    ggplot2,
+    cowplot,
+    tidyr (>= 1.0.0),
+    magrittr
 RoxygenNote: 7.1.0
 Suggests: 
+    rmarkdown,
     knitr,
-    rmarkdown
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr

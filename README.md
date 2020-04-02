@@ -1,6 +1,6 @@
 # MAVEn
 
-This repository holds the code being developed for Providence College (PC) and Dr. James Waters, coded by Megan L. Larsen of DAPPER Stats. 
+This repository holds the code being developed for Providence College (PC) and Dr. James Waters, coded by Megan L. Larsen & Juniper L. Simonis of DAPPER Stats. 
 
 The repository is private and code is not to be shared ouutside of this collaboration.
 
