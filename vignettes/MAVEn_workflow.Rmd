@@ -13,62 +13,119 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
-library(ggplot2)
+library(pander)
 library(MAVEn)
 ```
 
 ## Overview
 
+MAVEn data are exported from the instrument as a large table of instrument, CO[2], and activity data for animals across 16 chambers. Here, we demonstrate a workflow pipeline for evaluating MAVEn metabolism and activity data with flexibility in calculating animal activity status. 
+
+There are two worflow strategies: (1) one that leverages all the functionality within the code base to work through and evaluate data in a step wise fashion and (2) one that integrates all the package functions into a single function, `evaluate_maven`, for fast data proc. Both are outlined below. 
+
+Functions are built on specific data, so it is imperative to make sure the information provided in each of the functions matches the function parameter. 
+
+
+## Data structure
+
+Data are produced as a high-resolution time-series (1 second intervals) with instrument readings for connected probes (e.g. temperature, CO[2], thermocouplers) and readings within the 16 chambers for CO[2] consumption and activity. 
+Instrument readings begin in whichever chamber was the last to be recorded in the previous instrument run. 
+The instrument defaults to a 120 second measurement per chamber, but it appears there is some variation in that measurement. 
+In addition, there are 180 second measurements for baseline data (Chamber 0) collected in between readings for Chamber 16 and Chamber 1. 
+
+
+## Workflow (1) pipeline overview:
 1. Data are loaded into the space using `read_maven`, which removes all baseline data from the dataset prior to processing.
 
-2. Cycle numbers are assigned to the data using `cycle_number` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn dataset with appended cycle numbers.
+2. Cycle numbers are assigned to the data using `assign_cyclenumber` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn dataset with appended cycle numbers and is responsive to the chamber where the instrument started and stopped/
 
 3. The complete dataset is then deconstructed into a dataset for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
 
-4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. These functions make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 30 sec) and an activity state based on a given threshold. 
+4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. They make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 30 sec) and an activity state based on a given threshold. 
 
-5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO2, and activity for a MAVEn run. 
-
-Evaluation of the MAVEn datafiles can be completed in one of two ways: either step by step as outlines below or with the function `evaluate_maven` which will provide all graphics and tables for a single experimental run.
-
-## Workflow example 1 ----
+5. The final output data table is produced with `maven_datatable`, which provides the fly, cycle, median CO[2], and activity for a MAVEn run. 
 
 
+### Instrument run overview ----
 
-```{r}
+Evaluating the experimental time course is a vital step to check for issues with chamber sealing or measurements that may impact the experiment. 
+
+Here, we read in the full MAVEn dataset that includes the baseline data by toggling `baseline = T` in the `read_maven` function. 
+
+```{r loadRawData}
+
 maven_raw <- read_maven(datadir = "../data", 
                         maven_datafile = "./maven_output.csv", baseline = T)
-plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
+
 ```
 
-#  Data processing pipeline ----
 
-**Step 1**: load the MAVEn dataset without baseline 
+Raw data are imported into `plot_maven_overview` to produce four time series plots of the Chamber, instrument carbon dioxide (CO[2]) concentration (parts per million, ppm), flow rate (mL min^-1) in the sample/animal chamber (FRC_mlmin), and thermocouple 1. 
+
+```{r plotOverview}
+
+plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
+
+```
+
+
+### Processing MAVEn data ----
+
+**Step 1**: Load the MAVEn dataset without baseline  
+
+Baseline data from all downstream calculations, with the exception of the metabolism and activity visual diagnostics. However, if baseline data are required, simply change the baseline toggle to `TRUE`.
+
 ```{r}
+
 maven <- read_maven(datadir = "../data", 
                     maven_datafile = "./maven_output.csv", baseline = F)
 ```
 
-**Step 2**: Assign a cycle number to the data
 
-This function is responsive to where the instrument begins its readings and will assign the start of a cycle to Chamber 1
-```{r}
+**Step 2**: Assign a cycle number to the data  
+
+Cycle numbers refer to the complete measurement of Chambers 1 - 16.
+When the instrument run is started, measurements begin in the chamber where the instrument run last finished rather than restarting with a baseline (Chamber 0) or Chamber 1. Measurements continue until the instrument run is terminated, which could occur in the middle of a chamber's measurement.
+Cycle assignment using `assign_cyclenumber` is responsive to those cases and will only assign a cycle number to data that are part of a complete cycle. 
+
+```{r assign-cyclenumber}
+
 maven.cycle <- assign_cyclenumber(maven)
+
 ```
 
-**Step 3a**: Extract the metabolism data from the dataset ----
-```{r}
+
+**Step 3a**: Extract the metabolism data from the dataset
+
+Extracting information from the larger dataset provides a mechanism to only use the critical pieces of information.
+Animal metabolism is associated with CO[2] production within a given chamber. 
+These data are extracted from the CO2_mlminFly1:CO2_mlminFly16 columns in cycle-assign MAVEn datset using `extract_metabolism`. 
+
+```{r exract-metabolism}
+
 animal_metabolism <- extract_metabolism(maven.cycle)
+
 ```
 
-**Step 3b**: Visualize the trend data to check for issues in measurements ----
+**Step 3b**: Visualize the trend data to check for issues in measurements 
 
-The `extract_metabolism` function has standardized the time course to a measurement number (Second - min(Second)) to produce a consistent visualization of the data by cycle.
-There are additional parameters added for saving the graphical output if needed. The default is to save a png named `MetabolismTrends.png`.
-Because these plots are generated with the ggplot2 package, you can save each as an object and modify as you wish with themes, colors, etc.
+`extract_metabolism` also standardizes the time course readings to a measurement number (Second - min(Second)) to produce a consistent visualization of the data by cycle.
+There are additional parameters added for saving the graphical output if needed. By default, the image is saved as a `.png` named `MetabolismTrends.png`.
+These plots are generated with the ggplot2 package, which means they can be modified with themes, colors, etc. by assigning them to a value. 
 
-```{r}
+```{r plot-trend}
+
 metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
+
+```
+
+```{r plot-trend-options}
+
+library(ggplot2)
+
+p <- metablism_trend(animal_metabolism, maven_experiment = "maven.example1")
+p + scale_color_brewer(palette = "Dark2") + theme_bw()
+
 ```
 
 
