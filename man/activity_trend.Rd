@@ -29,8 +29,5 @@ baseline using \code{extract_activity}.}
 The data are adjusted to a standardized measurement reading for illustration.
 }
 \examples{
-animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle,
-interval = 60, activity_baseline = 0.01)
-
-activity_trend(animal_activity, maven_experiment = "maven.example1")
+#' activity_trend(animal_activity, maven_experiment = "maven.example1")
 }

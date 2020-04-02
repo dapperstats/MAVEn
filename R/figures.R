@@ -11,45 +11,50 @@
 #' @param out_filename Figure name.
 #' @param out_filetype Figure file type.
 #'
-#' @import tidyr
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select mutate
+#' @importFrom tidyr pivot_longer
+#' @importFrom ggplot2 ggplot ggsave
+#' 
 #' @export
 #'
 #' @examples
 #' plot_maven_overview(maven_raw, outdir = "output", 
 #' out_filename = "ExpOverview", out_filetype = ".png")
 plot_maven_overview <- function(maven_raw, maven_experiment = "",
-    outdir = "output", out_filename = "ExpOverview", out_filetype = ".png") {
-    
-    fpath <- file.path(outdir)
-    
-    if(!dir.exists(fpath)){
-        dir.create(fpath)
-        }
-    
-    experiment <- maven_raw %>% 
-        select(Seconds, TC1, FRC_mlmin, CO2ppm, Chamber) %>% 
-        pivot_longer(names_to = "Measurement", 
-        values_to = "value", -Seconds) %>% 
-        mutate(minutes = Seconds / 60)
-    
-    p <- ggplot(data = experiment, aes(x = minutes, y = value)) + 
-        geom_line() + 
-        facet_wrap(~Measurement, scales = "free_y", ncol = 1) + 
-        labs(title = "MAVEn run summary", 
-            x = "Time (min)", 
-            y = "Result value",
-            caption = maven_experiment) + 
-        theme(plot.title.position = "plot", 
-              plot.caption.position =  "plot")
-    
-    outpath <- file.path(outdir, 
-                         out_filename = paste0(Sys.Date(),"_",maven_experiment, 
-                                               "_", out_filename, out_filetype))
-    
-    ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-        width = 4, height = 4)
-    
-    return(p)
+                                outdir = "output", out_filename = "ExpOverview",
+                                out_filetype = ".png") {
+  
+  fpath <- file.path(outdir)
+  
+  if(!dir.exists(fpath)){
+    dir.create(fpath)
+  }
+  
+  experiment <- maven_raw %>% 
+    select(Seconds, TC1, FRC_mlmin, CO2ppm, Chamber) %>% 
+    pivot_longer(names_to = "Measurement", 
+                 values_to = "value", -Seconds) %>% 
+    mutate(minutes = Seconds / 60)
+  
+  p <- ggplot(data = experiment, aes(x = minutes, y = value)) + 
+    geom_line() + 
+    facet_wrap(~Measurement, scales = "free_y", ncol = 1) + 
+    labs(title = "MAVEn run summary", 
+         x = "Time (min)", 
+         y = "Result value",
+         caption = maven_experiment) + 
+    theme(plot.title.position = "plot", 
+          plot.caption.position =  "plot")
+  
+  outpath <- file.path(outdir, 
+                       out_filename = paste0(Sys.Date(),"_",maven_experiment, 
+                                             "_", out_filename, out_filetype))
+  
+  ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
+         width = 4, height = 4)
+  
+  return(p)
 }
 
 
@@ -59,42 +64,48 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
 #' chamber. The data are adjusted to a standardized measurement reading for
 #' illustration.
 #'
-#'@param animal_metabolism animal metabolism dataframe extracted from the MAVEn
+#' @param animal_metabolism animal metabolism dataframe extracted from the MAVEn
 #'  without baseline using \code{extract_metabolism}.
-#'@param maven_experiment Experiment name. Applied to both figures and files.
-#'@param outdir Folder where figure should be stored.
-#'@param out_filename Figure name.
-#'@param out_filetype Figure file type.
+#' @param maven_experiment Experiment name. Applied to both figures and files.
+#' @param outdir Folder where figure should be stored.
+#' @param out_filename Figure name.
+#' @param out_filetype Figure file type.
 #'
-#'@return
-#'@export
+#' @importFrom magrittr %>%
+#' @importFrom dplyr mutate
+#' @importFrom ggplot2 ggplot ggsave
+#' 
+#' @return
+#' @export
 #'
 #' @examples metablism_trend(animal_metabolism, outdir = "output",
 #' out_filename = "", out_filetype = ".png")
 metablism_trend <- function(animal_metabolism, maven_experiment = "",
-    outdir = "output", out_filename = "MetabolismTrends", out_filetype = ".png") {
-    p <- ggplot(data = animal_metabolism %>% 
-            mutate(result = co2_convertion(result)), 
-        aes(x = measurement_number, y = result, col = cycle)) + 
-        geom_point() + 
-        facet_wrap(~ Chamber, scales = "free_y") + 
-        labs(title = "Animal Metabolism Trends", 
-            x = "Measurement Time", 
-            y = expression(CO[2] ~ (mu * L ~ h^-1)),
-            caption = maven_experiment) + 
-        scale_color_viridis_d(option = "D", begin = 0.2, end = 0.8) +
-        theme(legend.position = "bottom",
-              plot.title.position = "plot", 
-              plot.caption.position =  "plot")
-    
-    outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
-            out_filename, out_filetype))
-    
-    ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-        width = 7, height = 4)
-    
-    return(p)
+                            outdir = "output", out_filename = "MetabolismTrends",
+                            out_filetype = ".png") {
+  
+  p <- ggplot(data = animal_metabolism %>% 
+                mutate(result = co2_convertion(result)), 
+              aes(x = measurement_number, y = result, col = cycle)) + 
+    geom_point() + 
+    facet_wrap(~ Chamber, scales = "free_y") + 
+    labs(title = "Animal Metabolism Trends", 
+         x = "Measurement Time", 
+         y = expression(CO[2] ~ (mu * L ~ h^-1)),
+         caption = maven_experiment) + 
+    scale_color_viridis_d(option = "D", begin = 0.2, end = 0.8) +
+    theme(legend.position = "bottom",
+          plot.title.position = "plot", 
+          plot.caption.position =  "plot")
+  
+  outpath <- file.path(outdir, 
+                       out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
+                                             out_filename, out_filetype))
+  
+  ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
+         width = 7, height = 4)
+  
+  return(p)
 }
 
 #' Visual diagnostic for metabolism data using MAVEn with baseline
@@ -107,49 +118,59 @@ metablism_trend <- function(animal_metabolism, maven_experiment = "",
 #' @param out_filename Figure name.
 #' @param out_filetype Figure file type.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select mutate
+#' @importFrom tidyr pivot_longer
+#' @importFrom ggplot2 ggplot ggsave
+#' 
 #' @return
 #' @export
 #'
 #' @examples metabolism_diag(maven_raw, metabolism_summary_cycle, 
-#' outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png")
-metabolism_diag <- function(maven_raw, metabolism_summary_cycle, maven_experiment = "",
-    outdir = "output", out_filename = "MetabolismDiagnostic", out_filetype = ".png") {
-    
-    df <- maven_raw %>% 
-        select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, 
-        CO2_mlminFly1:CO2_mlminFly16) %>% 
-        pivot_longer(cols = CO2_mlminFly1:CO2_mlminFly16, 
-            names_to = "parameter", 
-            values_to = "result") %>% 
-        mutate(parameter = as.numeric(gsub(x = parameter, "CO2_mlminFly", "")),
-            result = co2_convertion(result))
-    
-    
-    p <- ggplot(data = df, aes(x = Seconds, y = result)) + 
-        facet_grid(parameter ~ .) + 
-        geom_line() + 
-        geom_point(data = metabolism_summary_cycle %>% 
-                mutate(parameter = Chamber), 
-            aes(x = median_time, y = median_co2_ul.h, 
-                col = parameter), 
-            size = 3) + 
-        labs(title = "Metabolism diagnostic", 
-            x = "Seconds", 
-            y = expression(CO[2] ~ (mu * L ~ h^-1)),
-            caption = maven_experiment) +
-        theme(legend.position = "none",
-              plot.title.position = "plot", 
-              plot.caption.position =  "plot")
-    
-    outpath <- file.path(outdir, 
-        out_filename = paste0(Sys.Date(),"_",maven_experiment, "_",
-            out_filename, out_filetype))
-    
-    ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
-        width = 4, height = 8)
-    
-    return(p)
-    
+#' outdir = "output", out_filename = "MetabolismDiagnostic", 
+#' out_filetype = ".png")
+metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
+                            maven_experiment = "",
+                            outdir = "output", 
+                            out_filename = "MetabolismDiagnostic",
+                            out_filetype = ".png") {
+  
+  df <- maven_raw %>% 
+    select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, 
+           CO2_mlminFly1:CO2_mlminFly16) %>% 
+    pivot_longer(cols = CO2_mlminFly1:CO2_mlminFly16, 
+                 names_to = "parameter", 
+                 values_to = "result") %>% 
+    mutate(parameter = as.numeric(gsub(x = parameter, "CO2_mlminFly", "")),
+           result = co2_convertion(result))
+  
+  
+  p <- ggplot(data = df, aes(x = Seconds, y = result)) + 
+    facet_grid(parameter ~ .) + 
+    geom_line() + 
+    geom_point(data = metabolism_summary_cycle %>% 
+                 mutate(parameter = Chamber), 
+               aes(x = median_time, y = median_co2_ul.h, 
+                   col = parameter), 
+               size = 3) + 
+    labs(title = "Metabolism diagnostic", 
+         x = "Seconds", 
+         y = expression(CO[2] ~ (mu * L ~ h^-1)),
+         caption = maven_experiment) +
+    theme(legend.position = "none",
+          plot.title.position = "plot", 
+          plot.caption.position =  "plot")
+  
+  outpath <- file.path(outdir, 
+                       out_filename = paste0(Sys.Date(),"_",
+                                             maven_experiment, "_",
+                                             out_filename, out_filetype))
+  
+  ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
+         width = 4, height = 8)
+  
+  return(p)
+  
 }
 
 #'Plot animal activity trends.
@@ -165,20 +186,20 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle, maven_experimen
 #' @param out_filetype Figure file type.
 #'
 #' @export
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot ggsave
 #'
 #' @examples 
 #' #' activity_trend(animal_activity, maven_experiment = "maven.example1")
-activity_trend <- function(animal_activity, maven_experiment = "",
-                           outdir = "output", out_filename = "ActivityTrends", 
+activity_trend <- function(animal_activity, 
+                           maven_experiment = "",
+                           outdir = "output", 
+                           out_filename = "ActivityTrends", 
                            out_filetype = ".png") {
-    
+  
   p <- ggplot(data = animal_activity, 
               aes(x = measurement_number, y = result, col = cycle)) + 
     geom_point() + 
     facet_wrap(~ Chamber, scales = "free_y") + 
-    #geom_vline(aes(xintercept = measurement_number_time), 
-    #   col = "red", linetype = "dashed") +
     labs(title = "Animal Activity Trends", 
          x = "Measurement Number", 
          y = "Activity",
@@ -189,7 +210,8 @@ activity_trend <- function(animal_activity, maven_experiment = "",
           plot.caption.position =  "plot")
   
   outpath <- file.path(outdir, 
-                       out_filename = paste0(Sys.Date(),"_", maven_experiment, "_",
+                       out_filename = paste0(Sys.Date(),"_", 
+                                             maven_experiment, "_",
                                              out_filename, out_filetype))
   
   ggsave(p, filename = outpath, dpi = 300, scale = 1.5, 
@@ -213,7 +235,12 @@ activity_trend <- function(animal_activity, maven_experiment = "",
 #' @param out_filename Figure name.
 #' @param out_filetype Figure file type.
 #' 
-#' @import tidyr
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select mutate
+#' @importFrom tidyr pivot_longer
+#' @importFrom ggplot2 ggplot ggsave
+#' @importFrom cowplot plot_grid
+#' 
 #' @export
 #'
 activity_diag <- function(maven_raw = "",
@@ -224,70 +251,70 @@ activity_diag <- function(maven_raw = "",
                           maven_experiment = "",
                           out_filename = "ActivityDiagnostic",
                           out_filetype = ".png") {
-
-    df <- maven_raw %>%
-        select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
-        pivot_longer(cols = Act_1:Act_16,
-                     names_to = 'parameter',
-                     values_to = 'result') %>%
-        mutate(parameter = as.numeric(gsub(x = parameter, 'Act_', '')))
-
-
-    maven_summary <- maven_datatable(metabolism_summary_cycle,
-                                     activity_summary_cycle,
-                                     out_filename = NULL) %>%
-        mutate(parameter = Chamber,
-               interval.start = median_time - interval,
-               interval.end = median_time + interval)
-
-
-    p.met <- ggplot(data = maven_summary,
-                    aes(x = cycle,
-                        y = median_co2_ul.h,
-                        col = parameter, shape = cycle)) +
-        geom_point(size = 2, col = "blue") +
-        facet_grid(parameter ~ .) +
-        labs(x = "cycle", y = expression(Median~CO[2]),
-             title = "Activity diagnostic",
-             subtitle = "median metabolism") +
-        theme(legend.position = "none",
-              plot.caption = element_text(hjust = 0, face= "italic"),
-              plot.title.position = "plot", #NEW parameter. Apply for subtitle too.
-              plot.caption.position =  "plot")
-
-    p <- ggplot() +
-        geom_rect(data = maven_summary,
-                  aes(xmin = interval.start,
-                      xmax = interval.end,
-                      ymin = -Inf,
-                      ymax = Inf, fill = activity_state),
-                  alpha = 0.4) +
-        geom_line(data = df, aes(x = Seconds, y = result)) +
-        facet_grid(parameter ~ .) +
-        geom_point(data = maven_summary,
-                   aes(x = median_time,
-                       y = mean_activity,
-                       col = activity_state, shape = cycle)) +
-        labs(subtitle = 'activity timeseries',
-             x = 'Seconds',
-             y = "Activity",
-             caption = maven_experiment) +
-        theme(legend.position = "bottom",
-              plot.title.position = "plot",
-              plot.caption.position =  "plot") +
-        scale_fill_brewer(palette = "Dark2") +
-        scale_color_brewer(palette = "Dark2")
-
-    p.merge <- plot_grid(p.met, p, ncol = 2, align = "hv", axis = "tb",
-              rel_widths = c(0.5,2))
-
-    outpath <- file.path(outdir,
-                         out_filename = paste0(Sys.Date(),"_",
-                                               maven_experiment, "_",
-                                               out_filename, out_filetype))
-
-    ggsave(p.merge, filename = outpath, dpi = 300, scale = 1.5,
-           width = 6, height = 8)
-
-    return(p.merge)
+  
+  df <- maven_raw %>%
+    select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
+    pivot_longer(cols = Act_1:Act_16,
+                 names_to = 'parameter',
+                 values_to = 'result') %>%
+    mutate(parameter = as.numeric(gsub(x = parameter, 'Act_', '')))
+  
+  
+  maven_summary <- maven_datatable(metabolism_summary_cycle,
+                                   activity_summary_cycle,
+                                   out_filename = NULL) %>%
+    mutate(parameter = Chamber,
+           interval.start = median_time - interval,
+           interval.end = median_time + interval)
+  
+  
+  p.met <- ggplot(data = maven_summary,
+                  aes(x = cycle,
+                      y = median_co2_ul.h,
+                      col = parameter, shape = cycle)) +
+    geom_point(size = 2, col = "blue") +
+    facet_grid(parameter ~ .) +
+    labs(x = "cycle", y = expression(Median~CO[2]),
+         title = "Activity diagnostic",
+         subtitle = "median metabolism") +
+    theme(legend.position = "none",
+          plot.caption = element_text(hjust = 0),
+          plot.title.position = "plot",
+          plot.caption.position =  "plot")
+  
+  p <- ggplot() +
+    geom_rect(data = maven_summary,
+              aes(xmin = interval.start,
+                  xmax = interval.end,
+                  ymin = -Inf,
+                  ymax = Inf, fill = activity_state),
+              alpha = 0.4) +
+    geom_line(data = df, aes(x = Seconds, y = result)) +
+    facet_grid(parameter ~ .) +
+    geom_point(data = maven_summary,
+               aes(x = median_time,
+                   y = mean_activity,
+                   col = activity_state, shape = cycle)) +
+    labs(subtitle = 'activity timeseries',
+         x = 'Seconds',
+         y = "Activity",
+         caption = maven_experiment) +
+    theme(legend.position = "bottom",
+          plot.title.position = "plot",
+          plot.caption.position =  "plot") +
+    scale_fill_brewer(palette = "Dark2") +
+    scale_color_brewer(palette = "Dark2")
+  
+  p.merge <- plot_grid(p.met, p, ncol = 2, align = "hv", axis = "tb",
+                       rel_widths = c(0.5,2))
+  
+  outpath <- file.path(outdir,
+                       out_filename = paste0(Sys.Date(),"_",
+                                             maven_experiment, "_",
+                                             out_filename, out_filetype))
+  
+  ggsave(p.merge, filename = outpath, dpi = 300, scale = 1.5,
+         width = 6, height = 8)
+  
+  return(p.merge)
 }
