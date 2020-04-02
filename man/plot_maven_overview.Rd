@@ -23,9 +23,6 @@ plot_maven_overview(
 
 \item{out_filetype}{Figure file type.}
 }
-\value{
-
-}
 \description{
 \code{plot_maven_overview} generates four plots to track the instrumental
 timecourse and requires the full MAVEn dataset (readings + baseline)
@@ -34,5 +31,5 @@ automatically saved.
 }
 \examples{
 plot_maven_overview(maven_raw, outdir = "output", 
-out_filename = "ExpOverview", out_filetype = ".png"))
+out_filename = "ExpOverview", out_filetype = ".png")
 }

@@ -9,7 +9,7 @@ sem(x, n)
 \arguments{
 \item{x}{list of values}
 
-\item{n}{}
+\item{n}{number of cycles}
 }
 \value{
 

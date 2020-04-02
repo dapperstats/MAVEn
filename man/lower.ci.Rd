@@ -7,9 +7,9 @@
 lower.ci(x, n)
 }
 \arguments{
-\item{x}{}
+\item{x}{list of values}
 
-\item{n}{}
+\item{n}{number of cycles}
 }
 \value{
 
