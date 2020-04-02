@@ -1,6 +1,6 @@
 ---
 title: "MAVEn_workflow"
-author: Megan L. Larsen
+author: Megan L. Larsen & Juniper L. Simonis
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{MAVEn_workflow}
@@ -48,7 +48,7 @@ library(MAVEn)
 
 MAVEn data are exported from the instrument as a large table of instrument, CO<sub>2</sub>, and activity data for animals across 16 chambers. Here, we demonstrate a workflow pipeline for evaluating MAVEn metabolism and activity data with flexibility in calculating animal activity status. 
 
-There are two worflow strategies: (1) one that leverages all the functionality within the code base to work through and evaluate data in a step wise fashion and (2) one that integrates all the package functions into a single function, `evaluate_maven`, for fast data proc. Both are outlined below. 
+There are two workflow strategies: (1) one that leverages all the functionality within the code base to work through and evaluate data in a step wise fashion and (2) one that integrates all the package functions into a single function, `evaluate_maven`, for fast data proc. Both are outlined below. 
 
 Functions are built on specific data, so it is imperative to make sure the information provided in each of the functions matches the function parameter. 
 
@@ -60,14 +60,15 @@ Instrument readings begin in whichever chamber was the last to be recorded in th
 The instrument defaults to a 120 second measurement per chamber, but it appears there is some variation in that measurement. 
 In addition, there are 180 second measurements for baseline data (Chamber 0) collected in between readings for Chamber 16 and Chamber 1. 
 
-<br><br>
 
-# Workflow pipeline overview:
-1. Data are loaded into the space using `read_maven`, which removes all baseline data from the dataset prior to processing.
+# Workflow pipeline
+## Overview steps
 
-2. Cycle numbers are assigned to the data using `assign_cyclenumber` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn dataset with appended cycle numbers and is responsive to the chamber where the instrument started and stopped/
+1. Data are loaded into the space using `read_maven`, which removes all baseline data from the data set prior to processing.
 
-3. The complete dataset is then deconstructed into a dataset for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
+2. Cycle numbers are assigned to the data using `assign_cyclenumber` with defaults for n_chambers = 16 and chamber measurement duration (chamber_measure_duration) = 120. This function will return the MAVEn data set with appended cycle numbers and is responsive to the chamber where the instrument started and stopped/
+
+3. The complete data set is then deconstructed into a data set for the fly metabolism using `extract_metabolism` and fly activity using `extract_activity`.
 
 4. These data are summarized individually using the functions `summarize_metabolism` and `summarize_activity`, which can produce either a summary table for each cycle within each chamber or for each chamber. They make use of the utility calculation functions `sem`, `lower.ci`, and `upper.ci`. `summarize_activity` provides both a calculated activity level for a specified time interval (e.g. +/- 30 sec) and an activity state based on a given threshold. 
 
@@ -78,7 +79,7 @@ In addition, there are 180 second measurements for baseline data (Chamber 0) col
 
 Evaluating the experimental time course is a vital step to check for issues with chamber sealing or measurements that may impact the experiment. 
 
-Here, we read in the full MAVEn dataset that includes the baseline data by toggling `baseline = T` in the `read_maven` function. 
+Here, we read in the full MAVEn data set that includes the baseline data by toggling `baseline = T` in the `read_maven` function. 
 
 ```{r loadRawData}
 
@@ -100,7 +101,7 @@ plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
 
 ## Processing MAVEn data
 
-### **Step 1**: Load the MAVEn dataset without baseline  
+### **Step 1**: Load the MAVEn data set without baseline  
 
 Baseline data from all downstream calculations, with the exception of the metabolism and activity visual diagnostics. However, if baseline data are required, simply change the baseline toggle to `TRUE`.
 
@@ -126,11 +127,11 @@ tibble(maven.cycle)
 ```
 
 
-### **Step 3a**: Extract the metabolism data from the dataset
+### **Step 3a**: Extract the metabolism data from the data set
 
-Extracting information from the larger dataset provides a mechanism to only use the critical pieces of information.
+Extracting information from the larger data set provides a mechanism to only use the critical pieces of information.
 Animal metabolism is associated with CO<sub>2</sub> production within a given chamber. 
-These data are extracted from the CO2_mlminFly1:CO2_mlminFly16 columns in cycle-assign MAVEn datset using `extract_metabolism`. 
+These data are extracted from the CO2_mlminFly1:CO2_mlminFly16 columns in cycle-assign MAVEn data set using `extract_metabolism`. 
 
 ```{r exract-metabolism}
 
@@ -255,7 +256,7 @@ pander(head(activity_summary_chamber), table.split.table = Inf)
 
 Visual diagnostics for the animal activity data are presented with the median metabolism rates for each cycle within a chamber.
 
-The periods of activity measurements are indicated by a coloured rectangle that specifies the calculated activity status of the animal at the time of measurement with respect to the selected activity threshold, set by the parameter `activity_threshold` in `activity_summary_cycle`.
+The periods of activity measurements are indicated by a colored rectangle that specifies the calculated activity status of the animal at the time of measurement with respect to the selected activity threshold, set by the parameter `activity_threshold` in `activity_summary_cycle`.
 
 ```{r plot-ActivityDiag, fig.height = 11, fig.width = 7, out.width="70%"}
 
@@ -286,8 +287,9 @@ ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
        y = expression(Median~CO[2]~(mu*L~h^-1)))
 ```
 
-<br><br>
-# Complete analysis workflow
+
+## OPT2: Complete analysis workflow
+Using this single function, you can quickly and easily evaluate a MAVEn experiment without needing to interface with underlying functions. 
 
 ```{r, eval = F}
 evaluate_maven(datadir = "../data",
