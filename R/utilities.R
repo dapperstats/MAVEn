@@ -3,6 +3,8 @@
 #' @param x list of CO2 values from MAVEn dataset
 #'
 #' @return
+#' 
+#' @importFrom stats median
 #'
 co2_convertion_median <- function(x) {
     co2.ul.h <- median(x) * 1000 * 60
@@ -26,6 +28,8 @@ co2_convertion <- function(x) {
 #' @param n number of cycles
 #'
 #' @return
+#' 
+#' @importFrom stats sd
 #'
 sem <- function(x, n) {
     sem <- sd(x)/sqrt(n)
@@ -39,6 +43,8 @@ sem <- function(x, n) {
 #' @param n number of cycles
 #'
 #' @return
+#' 
+#' @importFrom stats qt
 #'
 lower.ci <- function(x, n) {
     lower.ci <- mean(x) - qt(1 - (0.05/2), n - 1) * sem(x, n)
@@ -52,6 +58,8 @@ lower.ci <- function(x, n) {
 #' @param n number of cycles
 #'
 #' @return
+#' 
+#' @importFrom stats qt
 #'
 upper.ci <- function(x, n) {
     upper.ci <- mean(x) + qt(1 - (0.05/2), n - 1) * sem(x, n)
