@@ -2,6 +2,7 @@
 
 export(activity_diag)
 export(activity_trend)
+export(evaluate_maven)
 export(maven_datatable)
 export(metablism_trend)
 export(metabolism_diag)

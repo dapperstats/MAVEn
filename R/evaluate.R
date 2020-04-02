@@ -1,12 +1,35 @@
-## This script is to run the full suite of functions in a single step
-
+#' Evaluate entire MAVEn dataset
+#'
+#' @param datadir data directory
+#' @param outdir name of output directory. Defaults to "output"
+#' @param maven_datafile name of data file to be evaluated. Must be ".csv".
+#' @param maven_experiment name of experiment
+#' @param interval specified interval for activity calculations. Must be in secoonds and defaults to 60.
+#' @param activity_baseline Activity measurement baseline. Used to exclude values from dataset.
+#' @param activity_threshold Activity threshold used for calculating activity status (e.g. inactive vs. active)
+#' @param figures figures to be produced. Select from "overview", "diag", or "trend". Supply all three in list if you want all to be created. 
+#' 
+#' @return
+#' @export
+#'
+#' @examples evaluate_maven(maven_datafile = "maven_output.csv", 
+#'maven_experiment = "test.evaluate",
+#'activity_baseline = 0.01, activity_threshold = 1)
 evaluate_maven <- function(datadir = "data", outdir = "output",
                            maven_datafile = "./maven_output.csv", 
                            maven_experiment = "", 
                            interval = 60, 
                            activity_baseline = 0.01,
                            activity_threshold = 1, 
-                           figures = c("trend","diag","overview")){
+                           figures = c("trend","diag","overview"),
+                           supressWarnings = TRUE){
+  
+  fpath <- file.path(outdir)
+  
+  if(!dir.exists(fpath, showWarnings = FALSE)){
+    dir.create(fpath)
+  }
+  
   # Load data
   maven_raw <- read_maven(maven_datafile = maven_datafile, baseline = T)
   maven <- read_maven(maven_datafile = maven_datafile, baseline = F)
@@ -16,21 +39,23 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
   
   # animal metabolism
   animal_metabolism <- extract_metabolism(maven.cycle)
-  metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, type = "by_cycle")
+  metabolism_summary_cycle <- summarize_metabolism(animal_metabolism, 
+                                                   type = "by_cycle")
   
   #animal activity
   animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle, 
-                                   interval = interval, 
-                                   activity_baseline = activity_baseline)
-  activity_summary_cycle <- summarize_activity(animal_activity, type = "by_cycle", 
-                                               activity_threshold = activity_threshold)
+                                      interval = interval, 
+                                      activity_baseline = activity_baseline)
+  activity_summary_cycle <- summarize_activity(animal_activity, 
+                                               type = "by_cycle", 
+                                               activity_threshold = 
+                                                 activity_threshold)
   
   # final data table
   out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
                          maven_experiment = maven_experiment) 
   
   if ("overview" %in% figures) {
-    maven_raw <- read_maven(maven_datafile = maven_datafile, baseline = T)
     plot_maven_overview(maven_raw, maven_experiment = maven_experiment)
   } 
   
