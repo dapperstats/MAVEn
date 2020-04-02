@@ -16,7 +16,8 @@ Imports:
     dplyr,
     ggplot2,
     cowplot,
-    tidyr (>= 1.0.0)
+    tidyr (>= 1.0.0),
+    magrittr
 RoxygenNote: 7.1.0
 Suggests: 
     rmarkdown,

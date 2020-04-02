@@ -6,6 +6,10 @@
 #' @param n_chambers Defaults to 16. Only change if more chambers are added to the instrument platform.
 #' @param chamber_measure_duration Instrument read time per chamber. Defaults to 120 seconds. Only change if instrument read time per chamber is altered for an experimental run.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr arrange mutate
+#' @importFrom utils tail
+#'
 #' @examples assign_cyclenumbers(maven)
 assign_cyclenumber <- function(maven,
     n_chambers = 16,
