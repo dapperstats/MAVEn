@@ -8,6 +8,7 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
                            activity_threshold = 1, 
                            figures = c("trend","diag","overview")){
   # Load data
+  maven_raw <- read_maven(maven_datafile = maven_datafile, baseline = T)
   maven <- read_maven(maven_datafile = maven_datafile, baseline = F)
   
   # assign a cycle
