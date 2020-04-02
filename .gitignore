@@ -1,4 +1,3 @@
-data/
 
 */JamesWaters_code.R
 
@@ -10,3 +9,6 @@ output/
 .RData
 .Rhistory
 inst/doc
+doc
+Meta
+workspace.R
