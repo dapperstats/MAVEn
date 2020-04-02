@@ -18,13 +18,17 @@
 #   - What additional information about the experiment needs to be recorded?
 #   - Calculating animal activity with the absolute difference sums
 #   - Visual diagnostic for the animal metabolism data
-#   - Finalizing output datatable with experimental information, additional calculations
+#   - Finalizing output datatable with experimental information, additional 
+#     calculations
 
+library(MAVEn)
 
 ## Workflow example 1 ----
 
-# load the raw MAVEn dataset with baseline data
-# The experimental overview is currently based on 4 pre-selected columns from the previous code, but can be updated to include other functionality that would allow the user to select whichever columns are of interest for graphically viewing the experimental run
+# load the raw MAVEn dataset with baseline data The experimental overview is
+# currently based on 4 pre-selected columns from the previous code, but can be
+# updated to include other functionality that would allow the user to select
+# whichever columns are of interest for graphically viewing the experimental run
 
 ## Evaluate the experimental timecourse ----
 
