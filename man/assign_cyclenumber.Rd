@@ -16,6 +16,3 @@ assign_cyclenumber(maven, n_chambers = 16, chamber_measure_duration = 120)
 \description{
 \code{assign_cyclenumber} dynamically applies a cycle number to complete MAVEn runs. This function requires the use of the MAVEn dataset without baseline information.
 }
-\examples{
-assign_cyclenumbers(maven)
-}

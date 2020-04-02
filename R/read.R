@@ -12,12 +12,14 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr filter rename
 #' 
+#' @export
+#' 
 #' @examples 
 #' # import with baseline data
-#' maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)
+#' #maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)
 #' 
 #' # import without baseline data
-#' maven <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
+#' #maven <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
 read_maven <- function(datadir = "data", 
                         maven_datafile = "maven_output.csv", 
                         baseline = F) {

@@ -21,8 +21,8 @@ MAVEn dataset with (baseline = T) or without (baseline = F) data.
 }
 \examples{
 # import with baseline data
-maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)
+#maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)
 
 # import without baseline data
-maven <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
+#maven <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
 }

@@ -12,27 +12,25 @@
 #' @return
 #' @export
 #'
-#' @examples evaluate_maven(maven_datafile = "maven_output.csv", 
-#'maven_experiment = "test.evaluate",
-#'activity_baseline = 0.01, activity_threshold = 1)
-evaluate_maven <- function(datadir = "data", outdir = "output",
+evaluate_maven <- function(datadir = "", outdir = "",
                            maven_datafile = "./maven_output.csv", 
                            maven_experiment = "", 
                            interval = 60, 
                            activity_baseline = 0.01,
                            activity_threshold = 1, 
-                           figures = c("trend","diag","overview"),
-                           supressWarnings = TRUE){
+                           figures = c("trend","diag","overview")){
   
   fpath <- file.path(outdir)
   
-  if(!dir.exists(fpath, showWarnings = FALSE)){
+  if(!dir.exists(fpath)){
     dir.create(fpath)
   }
   
   # Load data
-  maven_raw <- read_maven(maven_datafile = maven_datafile, baseline = T)
-  maven <- read_maven(maven_datafile = maven_datafile, baseline = F)
+  maven_raw <- read_maven(datadir = datadir,
+                          maven_datafile = maven_datafile, baseline = T)
+  maven <- read_maven(datadir = datadir,
+                      maven_datafile = maven_datafile, baseline = F)
   
   # assign a cycle
   maven.cycle <- assign_cyclenumber(maven)
@@ -51,10 +49,7 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
                                                activity_threshold = 
                                                  activity_threshold)
   
-  # final data table
-  out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
-                         maven_experiment = maven_experiment) 
-  
+
   if ("overview" %in% figures) {
     plot_maven_overview(maven_raw, maven_experiment = maven_experiment)
   } 
@@ -73,5 +68,9 @@ evaluate_maven <- function(datadir = "data", outdir = "output",
                   interval = interval)
   }
   
+  # final data table
+  out <- maven_datatable(outdir = outdir,
+                         metabolism_summary_cycle, activity_summary_cycle, 
+                         maven_experiment = maven_experiment)   
   return(out)
 }

@@ -13,7 +13,7 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom magrittr %>%
 #'
-#' @examples extract_metabolism(maven)
+#' @export
 extract_metabolism <- function(maven.cycle) {
   
   met <- maven.cycle %>% 
@@ -52,9 +52,8 @@ extract_metabolism <- function(maven.cycle) {
 #' @importFrom dplyr mutate select left_join group_by filter 
 #' @importFrom tidyr pivot_longer
 #' @importFrom magrittr %>%
-#'
-#' @examples extract_activity(maven.cycle, metabolism_summary_cycle, 
-#' interval = 60, activity_baseline = 0.01)
+#' 
+#' @export
 extract_activity <- function(maven.cycle, 
                              metabolism_summary_cycle, 
                              interval = "", activity_baseline = "") {

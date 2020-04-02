@@ -33,6 +33,6 @@ chamber. The data are adjusted to a standardized measurement reading for
 illustration.
 }
 \examples{
-metablism_trend(animal_metabolism, outdir = "output",
-out_filename = "", out_filetype = ".png")
+#metablism_trend(animal_metabolism, outdir = "output",
+#out_filename = "", out_filetype = ".png")
 }

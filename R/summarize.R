@@ -15,11 +15,13 @@
 #' @importFrom dplyr left_join
 #' @importFrom utils write.csv
 #'
-#' @examples maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
-#' outdir = "output", out_filename = "ExperimentSummaryTable", maven_experiment = "")
+#' @examples #maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
+#' #outdir = "output", out_filename = "ExperimentSummaryTable", 
+#' #maven_experiment = "experiment")
 maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
                             outdir = "output", 
-                            out_filename = "ExperimentSummaryTable", maven_experiment = "") {
+                            out_filename = "ExperimentSummaryTable", 
+                            maven_experiment = "") {
     
     table <- metabolism_summary_cycle %>% 
         left_join(activity_summary_cycle, by = c("Chamber", "cycle"))
@@ -47,8 +49,8 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
 #' @importFrom stats median sd
 #'
 #' @examples 
-#' summarize_metabolism(animal_metabolism, type = "by_cycle")
-#' summarize_metabolism(animal_metabolism, type = "by_chamber")
+#' #summarize_metabolism(animal_metabolism, type = "by_cycle")
+#' #summarize_metabolism(animal_metabolism, type = "by_chamber")
 summarize_metabolism <- function(animal_metabolism, type = "") {
     
     n_cycles <- as.numeric(max(animal_metabolism$cycle))
@@ -89,8 +91,8 @@ summarize_metabolism <- function(animal_metabolism, type = "") {
 #' @importFrom stats median sd
 #'
 #' @examples 
-#' summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
-#' summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
+#' #summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
+#' #summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
 summarize_activity <- function(animal_activity, type = "", 
                                activity_threshold = "0.5") {
     

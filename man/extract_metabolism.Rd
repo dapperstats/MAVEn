@@ -18,6 +18,3 @@ Extracted animal metabolism data.
 integrated MAVEn dataset. It applies a measurement adjustment to the time
 series for visualization with \code{metabolism_trend}.
 }
-\examples{
-extract_metabolism(maven)
-}

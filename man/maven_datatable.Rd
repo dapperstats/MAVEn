@@ -32,6 +32,7 @@ maven_datatable(
 Create final MAVEn datatable for an experimental run
 }
 \examples{
-maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
-outdir = "output", out_filename = "ExperimentSummaryTable", maven_experiment = "")
+#maven_datatable(metabolism_summary_cycle, activity_summary_cycle, 
+#outdir = "output", out_filename = "ExperimentSummaryTable", 
+#maven_experiment = "experiment")
 }

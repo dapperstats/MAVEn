@@ -1,6 +1,6 @@
 #' Assign cycle number to MAVEn dataset
 #'
-#'\code{assign_cyclenumber} dynamically applies a cycle number to complete MAVEn runs. This function requires the use of the MAVEn dataset without baseline information.
+#' \code{assign_cyclenumber} dynamically applies a cycle number to complete MAVEn runs. This function requires the use of the MAVEn dataset without baseline information.
 #'
 #' @param maven MAVEn dataset without baseline.
 #' @param n_chambers Defaults to 16. Only change if more chambers are added to the instrument platform.
@@ -9,8 +9,8 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr arrange mutate
 #' @importFrom utils tail
-#'
-#' @examples assign_cyclenumbers(maven)
+#' 
+#' @export
 assign_cyclenumber <- function(maven,
     n_chambers = 16,
     chamber_measure_duration = 120) {

@@ -14,13 +14,9 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr pivot_longer
-#' @importFrom ggplot2 ggplot ggsave
+#' @importFrom ggplot2 ggplot ggsave aes geom_line facet_wrap labs theme
 #' 
 #' @export
-#'
-#' @examples
-#' plot_maven_overview(maven_raw, outdir = "output", 
-#' out_filename = "ExpOverview", out_filetype = ".png")
 plot_maven_overview <- function(maven_raw, maven_experiment = "",
                                 outdir = "output", out_filename = "ExpOverview",
                                 out_filetype = ".png") {
@@ -73,13 +69,13 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
-#' @importFrom ggplot2 ggplot ggsave
+#' @importFrom ggplot2 ggplot aes geom_line facet_wrap labs scale_color_viridis_d theme ggsave
 #' 
 #' @return
 #' @export
 #'
-#' @examples metablism_trend(animal_metabolism, outdir = "output",
-#' out_filename = "", out_filetype = ".png")
+#' @examples #metablism_trend(animal_metabolism, outdir = "output",
+#' #out_filename = "", out_filetype = ".png")
 metablism_trend <- function(animal_metabolism, maven_experiment = "",
                             outdir = "output", out_filename = "MetabolismTrends",
                             out_filetype = ".png") {
@@ -87,7 +83,7 @@ metablism_trend <- function(animal_metabolism, maven_experiment = "",
   p <- ggplot(data = animal_metabolism %>% 
                 mutate(result = co2_convertion(result)), 
               aes(x = measurement_number, y = result, col = cycle)) + 
-    geom_point() + 
+    geom_line(size = 2) + 
     facet_wrap(~ Chamber, scales = "free_y") + 
     labs(title = "Animal Metabolism Trends", 
          x = "Measurement Time", 
@@ -121,14 +117,14 @@ metablism_trend <- function(animal_metabolism, maven_experiment = "",
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr pivot_longer
-#' @importFrom ggplot2 ggplot ggsave
+#' @importFrom ggplot2 ggplot aes facet_grid geom_line geom_point ggsave
 #' 
 #' @return
 #' @export
 #'
-#' @examples metabolism_diag(maven_raw, metabolism_summary_cycle, 
-#' outdir = "output", out_filename = "MetabolismDiagnostic", 
-#' out_filetype = ".png")
+#' @examples #metabolism_diag(maven_raw, metabolism_summary_cycle, 
+#' #outdir = "output", out_filename = "MetabolismDiagnostic", 
+#' #out_filetype = ".png")
 metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
                             maven_experiment = "",
                             outdir = "output", 
@@ -152,7 +148,7 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
                  mutate(parameter = Chamber), 
                aes(x = median_time, y = median_co2_ul.h, 
                    col = parameter), 
-               size = 3) + 
+               size = 3, col = "red") + 
     labs(title = "Metabolism diagnostic", 
          x = "Seconds", 
          y = expression(CO[2] ~ (mu * L ~ h^-1)),
@@ -186,10 +182,10 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' @param out_filetype Figure file type.
 #'
 #' @export
-#' @importFrom ggplot2 ggplot ggsave
+#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d theme ggsave
 #'
 #' @examples 
-#' #' activity_trend(animal_activity, maven_experiment = "maven.example1")
+#' #activity_trend(animal_activity, maven_experiment = "maven.example1")
 activity_trend <- function(animal_activity, 
                            maven_experiment = "",
                            outdir = "output", 
@@ -238,7 +234,7 @@ activity_trend <- function(animal_activity,
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr pivot_longer
-#' @importFrom ggplot2 ggplot ggsave
+#' @importFrom ggplot2 ggplot aes geom_point facet_grid labs theme element_text geom_rect geom_line scale_fill_brewer scale_color_brewer ggsave
 #' @importFrom cowplot plot_grid
 #' 
 #' @export

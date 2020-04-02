@@ -19,6 +19,6 @@ without baseline using \code{extract_metabolism}.}
 Summarize metabolism data.
 }
 \examples{
-summarize_metabolism(animal_metabolism, type = "by_cycle")
-summarize_metabolism(animal_metabolism, type = "by_chamber")
+#summarize_metabolism(animal_metabolism, type = "by_cycle")
+#summarize_metabolism(animal_metabolism, type = "by_chamber")
 }

@@ -29,5 +29,5 @@ baseline using \code{extract_activity}.}
 The data are adjusted to a standardized measurement reading for illustration.
 }
 \examples{
-#' activity_trend(animal_activity, maven_experiment = "maven.example1")
+#activity_trend(animal_activity, maven_experiment = "maven.example1")
 }

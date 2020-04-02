@@ -5,15 +5,14 @@
 \title{Evaluate entire MAVEn dataset}
 \usage{
 evaluate_maven(
-  datadir = "data",
-  outdir = "output",
+  datadir = "",
+  outdir = "",
   maven_datafile = "./maven_output.csv",
   maven_experiment = "",
   interval = 60,
   activity_baseline = 0.01,
   activity_threshold = 1,
-  figures = c("trend", "diag", "overview"),
-  supressWarnings = TRUE
+  figures = c("trend", "diag", "overview")
 )
 }
 \arguments{
@@ -38,9 +37,4 @@ evaluate_maven(
 }
 \description{
 Evaluate entire MAVEn dataset
-}
-\examples{
-evaluate_maven(maven_datafile = "maven_output.csv", 
-maven_experiment = "test.evaluate",
-activity_baseline = 0.01, activity_threshold = 1)
 }

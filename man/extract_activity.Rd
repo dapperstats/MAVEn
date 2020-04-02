@@ -33,7 +33,3 @@ Extracted animal activity dataset with median time and activity
 MAVEn dataset and calculated animal metabolism. It applies a measurement
 adjustment to the time series for visualization with \code{activity_trend}.
 }
-\examples{
-extract_activity(maven.cycle, metabolism_summary_cycle, 
-interval = 60, activity_baseline = 0.01)
-}
