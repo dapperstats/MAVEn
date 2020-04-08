@@ -4,16 +4,10 @@
 \alias{activity_diag}
 \title{Visual diagnostic for activity data using MAVEn with baseline}
 \usage{
-activity_diag(
-  maven_raw = "",
-  metabolism_summary_cycle = "",
-  activity_summary_cycle = "",
-  interval = 120,
-  outdir = NULL,
-  maven_experiment = "",
-  out_filename = "ActivityDiagnostic",
-  out_filetype = ".png"
-)
+activity_diag(maven_raw = "", metabolism_summary_cycle = "",
+  activity_summary_cycle = "", interval = 120, outdir = NULL,
+  maven_experiment = "", out_filename = "ActivityDiagnostic",
+  out_filetype = ".png")
 }
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}

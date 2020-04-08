@@ -12,9 +12,6 @@ without baseline using \code{extract_metabolism}.}
 
 \item{type}{Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").}
 }
-\value{
-
-}
 \description{
 Summarize metabolism data.
 }

@@ -4,16 +4,10 @@
 \alias{evaluate_maven}
 \title{Evaluate entire MAVEn dataset}
 \usage{
-evaluate_maven(
-  datadir = "",
-  outdir = NULL,
-  maven_datafile = "./maven_output.csv",
-  maven_experiment = "",
-  interval = 60,
-  activity_baseline = 0.01,
-  activity_threshold = 1,
-  figures = c("trend", "diag", "overview")
-)
+evaluate_maven(datadir = "", outdir = NULL,
+  maven_datafile = "./maven_output.csv", maven_experiment = "",
+  interval = 60, activity_baseline = 0.01, activity_threshold = 1,
+  figures = c("trend", "diag", "overview"))
 }
 \arguments{
 \item{datadir}{data directory}
@@ -31,9 +25,6 @@ evaluate_maven(
 \item{activity_threshold}{Activity threshold used for calculating activity status (e.g. inactive vs. active)}
 
 \item{figures}{figures to be produced. Select from "overview", "diag", or "trend". Supply all three in list if you want all to be created.}
-}
-\value{
-
 }
 \description{
 Evaluate entire MAVEn dataset

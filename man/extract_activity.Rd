@@ -4,12 +4,8 @@
 \alias{extract_activity}
 \title{Extract animal activity data from MAVEn without baseline}
 \usage{
-extract_activity(
-  maven.cycle,
-  metabolism_summary_cycle,
-  interval = "",
-  activity_baseline = ""
-)
+extract_activity(maven.cycle, metabolism_summary_cycle, interval = "",
+  activity_baseline = "")
 }
 \arguments{
 \item{maven.cycle}{MAVEn dataset with cycles assigned. Must apply

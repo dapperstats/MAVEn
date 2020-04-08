@@ -4,13 +4,8 @@
 \alias{plot_maven_overview}
 \title{Plot MAVEn experimental overview data.}
 \usage{
-plot_maven_overview(
-  maven_raw,
-  maven_experiment = "",
-  outdir = NULL,
-  out_filename = "ExpOverview",
-  out_filetype = ".png"
-)
+plot_maven_overview(maven_raw, maven_experiment = "", outdir = NULL,
+  out_filename = "ExpOverview", out_filetype = ".png")
 }
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}

@@ -4,7 +4,8 @@
 \alias{assign_cyclenumber}
 \title{Assign cycle number to MAVEn dataset}
 \usage{
-assign_cyclenumber(maven, n_chambers = 16, chamber_measure_duration = 120)
+assign_cyclenumber(maven, n_chambers = 16,
+  chamber_measure_duration = 120)
 }
 \arguments{
 \item{maven}{MAVEn dataset without baseline.}

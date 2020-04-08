@@ -6,3 +6,4 @@ workspace.R
 ^docs
 ^output
 analysis_example.R
+^LICENSE\.md$

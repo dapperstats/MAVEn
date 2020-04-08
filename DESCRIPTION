@@ -14,7 +14,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     dplyr,
-    ggplot2,
+    ggplot2 (>= 3.3.0),
     cowplot,
     tidyr (>= 1.0.0),
     magrittr
