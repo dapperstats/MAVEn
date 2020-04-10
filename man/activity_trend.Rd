@@ -4,13 +4,8 @@
 \alias{activity_trend}
 \title{Plot animal activity trends.}
 \usage{
-activity_trend(
-  animal_activity,
-  maven_experiment = "",
-  outdir = NULL,
-  out_filename = "ActivityTrends",
-  out_filetype = ".png"
-)
+activity_trend(animal_activity, maven_experiment = "", outdir = NULL,
+  out_filename = "ActivityTrends", out_filetype = ".png")
 }
 \arguments{
 \item{animal_activity}{animal activity dataframe extracted from the MAVEn without
