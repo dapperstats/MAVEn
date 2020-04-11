@@ -4,9 +4,13 @@
 \alias{metabolism_trend}
 \title{Plot animal metabolism trends.}
 \usage{
-metabolism_trend(animal_metabolism, maven_experiment = "",
-  outdir = NULL, out_filename = "MetabolismTrends",
-  out_filetype = ".png")
+metabolism_trend(
+  animal_metabolism,
+  maven_experiment = "",
+  outdir = NULL,
+  out_filename = "MetabolismTrends",
+  out_filetype = ".png"
+)
 }
 \arguments{
 \item{animal_metabolism}{animal metabolism dataframe extracted from the MAVEn
@@ -19,6 +23,9 @@ without baseline using \code{extract_metabolism}.}
 \item{out_filename}{Figure name.}
 
 \item{out_filetype}{Figure file type.}
+}
+\value{
+Plot of standardized metabolism readings for each cycle within each chamber.
 }
 \description{
 \code{metabolism_trend} graphcially displays the animal metabolism data by

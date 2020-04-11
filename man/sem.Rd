@@ -12,7 +12,7 @@ sem(x, n)
 \item{n}{number of cycles}
 }
 \value{
-
+Standard Error of Meatn
 }
 \description{
 Standard error of the mean

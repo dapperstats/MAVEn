@@ -10,7 +10,7 @@ co2_convertion(x)
 \item{x}{list of CO2 values from MAVEn dataset}
 }
 \value{
-
+list of converted CO2 measurement from ml/min to ul/hr.
 }
 \description{
 Convert CO2 MAVEn measurement to CO2 (ul/h)

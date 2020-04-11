@@ -4,8 +4,7 @@
 \alias{read_maven}
 \title{Read MAVEn output into R.}
 \usage{
-read_maven(datadir = "data", maven_datafile = "maven_output.csv",
-  baseline = F)
+read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
 }
 \arguments{
 \item{datadir}{Directory where data is stored}
@@ -16,6 +15,8 @@ read_maven(datadir = "data", maven_datafile = "maven_output.csv",
 }
 \value{
 MAVEn dataset with (baseline = T) or without (baseline = F) data.
+
+MAVEn dataset with or without baseline data.
 }
 \description{
 \code{read_maven} imports a MAVEn data with or without the baseline data (i.e. Chamber = 0).

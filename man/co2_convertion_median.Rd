@@ -10,7 +10,7 @@ co2_convertion_median(x)
 \item{x}{list of CO2 values from MAVEn dataset}
 }
 \value{
-
+Converted median CO2 measurement
 }
 \description{
 Calculate median CO2(ul/h)

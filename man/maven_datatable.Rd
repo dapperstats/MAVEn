@@ -4,9 +4,13 @@
 \alias{maven_datatable}
 \title{Create final MAVEn datatable for an experimental run}
 \usage{
-maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
-  outdir = NULL, out_filename = "ExperimentSummaryTable",
-  maven_experiment = "")
+maven_datatable(
+  metabolism_summary_cycle,
+  activity_summary_cycle,
+  outdir = NULL,
+  out_filename = "ExperimentSummaryTable",
+  maven_experiment = ""
+)
 }
 \arguments{
 \item{metabolism_summary_cycle}{Dataframe calculated by
@@ -20,6 +24,9 @@ maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
 \item{out_filename}{File name. Defaults to "ExperimentSummaryTable"}
 
 \item{maven_experiment}{MAVEn experiment name.}
+}
+\value{
+Table with calculated median metabolism  and activity by cycle.
 }
 \description{
 Create final MAVEn datatable for an experimental run

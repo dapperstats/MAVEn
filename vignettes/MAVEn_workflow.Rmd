@@ -30,10 +30,7 @@ if (n_needed > 0) {
     install.packages(needed)
 }
 
-for (i in 1:ndepend) {
-    suppressMessages(eval(bquote(library(.(depend[i])))))
-}
-
+library(ggplot2); library(pander); library(tidyr)
 
 ```
 
@@ -83,7 +80,7 @@ Here, we read in the full MAVEn data set that includes the baseline data by togg
 
 ```{r loadRawData}
 
-maven_raw <- read_maven(datadir = "../data", 
+maven_raw <- read_maven(datadir = "../inst/extdata", 
                         maven_datafile = "./maven_output.csv", baseline = T)
 tibble(maven_raw)
 
@@ -107,7 +104,7 @@ Baseline data from all downstream calculations, with the exception of the metabo
 
 ```{r loadData}
 
-maven <- read_maven(datadir = "../data", 
+maven <- read_maven(datadir = "../inst/extdata", 
                     maven_datafile = "./maven_output.csv", baseline = F)
 tibble(maven)
 ```

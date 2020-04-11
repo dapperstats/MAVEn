@@ -12,7 +12,7 @@ upper.ci(x, n)
 \item{n}{number of cycles}
 }
 \value{
-
+list of upper confidence intervals
 }
 \description{
 Upper confidence interval

@@ -4,9 +4,14 @@
 \alias{metabolism_diag}
 \title{Visual diagnostic for metabolism data using MAVEn with baseline}
 \usage{
-metabolism_diag(maven_raw, metabolism_summary_cycle,
-  maven_experiment = "", outdir = NULL,
-  out_filename = "MetabolismDiagnostic", out_filetype = ".png")
+metabolism_diag(
+  maven_raw,
+  metabolism_summary_cycle,
+  maven_experiment = "",
+  outdir = NULL,
+  out_filename = "MetabolismDiagnostic",
+  out_filetype = ".png"
+)
 }
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}
@@ -21,6 +26,9 @@ metabolism_diag(maven_raw, metabolism_summary_cycle,
 \item{out_filename}{Figure name.}
 
 \item{out_filetype}{Figure file type.}
+}
+\value{
+Plot with raw MAVEn data and calculated median metabolism.
 }
 \description{
 Visual diagnostic for metabolism data using MAVEn with baseline
