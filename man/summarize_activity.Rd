@@ -4,8 +4,7 @@
 \alias{summarize_activity}
 \title{Summarize animal activity data.}
 \usage{
-summarize_activity(animal_activity, type = "",
-  activity_threshold = "0.5")
+summarize_activity(animal_activity, type = "", activity_threshold = "0.5")
 }
 \arguments{
 \item{animal_activity}{Animal activity dataframe extracted from the MAVEn without
@@ -14,6 +13,9 @@ baseline using \code{extract_activity}.}
 \item{type}{Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").}
 
 \item{activity_threshold}{Threshold value to establish activity state.}
+}
+\value{
+Table of values with calculated activity by cycle or chamber.
 }
 \description{
 Summarize animal activity data.

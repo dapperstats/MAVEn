@@ -4,8 +4,13 @@
 \alias{plot_maven_overview}
 \title{Plot MAVEn experimental overview data.}
 \usage{
-plot_maven_overview(maven_raw, maven_experiment = "", outdir = NULL,
-  out_filename = "ExpOverview", out_filetype = ".png")
+plot_maven_overview(
+  maven_raw,
+  maven_experiment = "",
+  outdir = NULL,
+  out_filename = "ExpOverview",
+  out_filetype = ".png"
+)
 }
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}
@@ -17,6 +22,9 @@ plot_maven_overview(maven_raw, maven_experiment = "", outdir = NULL,
 \item{out_filename}{Figure name.}
 
 \item{out_filetype}{Figure file type.}
+}
+\value{
+Four panel plot of experimental overview for quick diagnostics. Includes, Chamber readings, Thermocouple 1 (TC1), Flow rate in the sample/animal chamber (ml/min) (FRC_mlmin), and carbon dioxide (CO[2], ppm).
 }
 \description{
 \code{plot_maven_overview} generates four plots to track the instrumental

@@ -4,10 +4,16 @@
 \alias{activity_diag}
 \title{Visual diagnostic for activity data using MAVEn with baseline}
 \usage{
-activity_diag(maven_raw = "", metabolism_summary_cycle = "",
-  activity_summary_cycle = "", interval = 120, outdir = NULL,
-  maven_experiment = "", out_filename = "ActivityDiagnostic",
-  out_filetype = ".png")
+activity_diag(
+  maven_raw = "",
+  metabolism_summary_cycle = "",
+  activity_summary_cycle = "",
+  interval = 120,
+  outdir = NULL,
+  maven_experiment = "",
+  out_filename = "ActivityDiagnostic",
+  out_filetype = ".png"
+)
 }
 \arguments{
 \item{maven_raw}{Complete MAVEn dataset including baseline readings.}
@@ -27,6 +33,11 @@ activity_diag(maven_raw = "", metabolism_summary_cycle = "",
 \item{out_filename}{Figure name.}
 
 \item{out_filetype}{Figure file type.}
+}
+\value{
+Plot with raw MAVEn data, calculated median metabolism, and 
+animal activity. Coloured boxes represent the calculated activity 
+state based on activity threshold.
 }
 \description{
 Visual diagnostic for activity data using MAVEn with baseline

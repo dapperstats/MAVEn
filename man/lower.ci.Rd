@@ -12,7 +12,7 @@ lower.ci(x, n)
 \item{n}{number of cycles}
 }
 \value{
-
+list of lower confidence intervals
 }
 \description{
 Lower confidence interval

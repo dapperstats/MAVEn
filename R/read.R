@@ -14,6 +14,8 @@
 #' 
 #' @export
 #' 
+#' @return MAVEn dataset with or without baseline data.
+#'
 #' @examples 
 #' # import with baseline data
 #' #maven_raw <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = T)

@@ -7,3 +7,4 @@ workspace.R
 ^output
 analysis_example.R
 ^LICENSE\.md$
+^data\truc2_maven_output.csv

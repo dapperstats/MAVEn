@@ -8,7 +8,7 @@
 #' @param out_filename File name. Defaults to "ExperimentSummaryTable"
 #' @param maven_experiment MAVEn experiment name.
 #'
-#' @return
+#' @return Table with calculated median metabolism  and activity by cycle.
 #' @export
 #' 
 #' @importFrom magrittr %>%
@@ -42,7 +42,7 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
 #'  without baseline using \code{extract_metabolism}.
 #' @param type Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").
 #'
-#' @return
+#' @return Table of values with calculated median metabolism by cycle or chamber.
 #' @export
 #' 
 #' @importFrom magrittr %>%
@@ -84,7 +84,7 @@ summarize_metabolism <- function(animal_metabolism, type = "") {
 #' @param type Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").
 #' @param activity_threshold Threshold value to establish activity state.
 #'
-#' @return
+#' @return Table of values with calculated activity by cycle or chamber.
 #' @export
 #' 
 #' @importFrom magrittr %>%

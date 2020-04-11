@@ -8,8 +8,7 @@
 #' @param activity_baseline Activity measurement baseline. Used to exclude values from dataset.
 #' @param activity_threshold Activity threshold used for calculating activity status (e.g. inactive vs. active)
 #' @param figures figures to be produced. Select from "overview", "diag", or "trend". Supply all three in list if you want all to be created. 
-#' 
-#' @return
+#'  
 #' @export
 #'
 evaluate_maven <- function(datadir = "", outdir = NULL,

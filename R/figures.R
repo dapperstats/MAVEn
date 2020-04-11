@@ -16,6 +16,8 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot ggsave aes geom_line facet_wrap labs theme
 #' 
+#' @return Four panel plot of experimental overview for quick diagnostics. Includes, Chamber readings, Thermocouple 1 (TC1), Flow rate in the sample/animal chamber (ml/min) (FRC_mlmin), and carbon dioxide (CO[2], ppm).
+#' 
 #' @export
 plot_maven_overview <- function(maven_raw, maven_experiment = "",
                                 outdir = NULL, out_filename = "ExpOverview",
@@ -73,7 +75,7 @@ plot_maven_overview <- function(maven_raw, maven_experiment = "",
 #' @importFrom dplyr mutate
 #' @importFrom ggplot2 ggplot aes geom_line facet_wrap labs scale_color_viridis_d theme ggsave
 #' 
-#' @return
+#' @return Plot of standardized metabolism readings for each cycle within each chamber. 
 #' @export
 #'
 #' @examples #metabolism_trend(animal_metabolism, outdir = "output",
@@ -123,7 +125,7 @@ metabolism_trend <- function(animal_metabolism, maven_experiment = "",
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes facet_grid geom_line geom_point ggsave
 #' 
-#' @return
+#' @return Plot with raw MAVEn data and calculated median metabolism.
 #' @export
 #'
 #' @examples #metabolism_diag(maven_raw, metabolism_summary_cycle, 
@@ -187,7 +189,11 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' @param out_filetype Figure file type.
 #'
 #' @export
-#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d theme ggsave
+#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d 
+#' theme ggsave
+#'
+#' @return Plot of standardized activity readings for each cycle within each chamber 
+#' for selected interval. 
 #'
 #' @examples 
 #' #activity_trend(animal_activity, maven_experiment = "maven.example1")
@@ -243,6 +249,10 @@ activity_trend <- function(animal_activity,
 #' @importFrom ggplot2 ggplot aes geom_point facet_grid labs theme element_text geom_rect geom_line scale_fill_brewer scale_color_brewer ggsave
 #' @importFrom cowplot plot_grid
 #' 
+#' @return Plot with raw MAVEn data, calculated median metabolism, and 
+#' animal activity. Coloured boxes represent the calculated activity 
+#' state based on activity threshold.
+#'
 #' @export
 #'
 activity_diag <- function(maven_raw = "",

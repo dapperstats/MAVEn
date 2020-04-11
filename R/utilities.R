@@ -2,7 +2,7 @@
 #'
 #' @param x list of CO2 values from MAVEn dataset
 #'
-#' @return
+#' @return Converted median CO2 measurement
 #' 
 #' @importFrom stats median
 #'
@@ -15,7 +15,7 @@ co2_convertion_median <- function(x) {
 #'
 #' @param x list of CO2 values from MAVEn dataset
 #'
-#' @return
+#' @return list of converted CO2 measurement from ml/min to ul/hr.
 #'
 co2_convertion <- function(x) {
     co2.ul.h <- x * 1000 * 60
@@ -27,7 +27,7 @@ co2_convertion <- function(x) {
 #' @param x list of values
 #' @param n number of cycles
 #'
-#' @return
+#' @return Standard Error of Meatn
 #' 
 #' @importFrom stats sd
 #'
@@ -42,7 +42,7 @@ sem <- function(x, n) {
 #' @param x list of values
 #' @param n number of cycles
 #'
-#' @return
+#' @return list of lower confidence intervals
 #' 
 #' @importFrom stats qt
 #'
@@ -57,7 +57,7 @@ lower.ci <- function(x, n) {
 #' @param x list of values
 #' @param n number of cycles
 #'
-#' @return
+#' @return list of upper confidence intervals
 #' 
 #' @importFrom stats qt
 #'

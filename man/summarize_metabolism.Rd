@@ -12,6 +12,9 @@ without baseline using \code{extract_metabolism}.}
 
 \item{type}{Summarize data by Chamber (="by_chamber") or by Cycle (="by_cycle").}
 }
+\value{
+Table of values with calculated median metabolism by cycle or chamber.
+}
 \description{
 Summarize metabolism data.
 }

@@ -3,13 +3,13 @@ Type: Package
 Title: A Worflow Pipeline for Processing MAVEn Datasets
 Version: 0.1.0
 Authors@R: as.person(c(
-    "Megan Larsen <larsen@dapper.com> [aut, cre]", 
-    "Juniper Simonis <simonis@dapper.com> [ctb]"
+    "Megan L. Larsen <larsen@dapper.com> [aut, cre]", 
+    "Juniper L. Simonis <simonis@dapper.com> [aut]",
+	"James S. Waters <jwaters2@providence.edu> [aut]"
   ))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: MAVEn is a workflow package for analyzing and visual diagnostics of MAVEn datasets. It is designed to allow the user to calculate animal metabolism and activity from time series data collected by the [MAVEn™ System for Small Insect Flow-Through Respirometry](https://www.sablesys.com/products/classic-line/maven_ft/)(Sable Systems Interational, Las Vegas, NV). 
 Depends: R (>= 3.2.3)
-License: MIT + file license
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 

@@ -4,8 +4,13 @@
 \alias{activity_trend}
 \title{Plot animal activity trends.}
 \usage{
-activity_trend(animal_activity, maven_experiment = "", outdir = NULL,
-  out_filename = "ActivityTrends", out_filetype = ".png")
+activity_trend(
+  animal_activity,
+  maven_experiment = "",
+  outdir = NULL,
+  out_filename = "ActivityTrends",
+  out_filetype = ".png"
+)
 }
 \arguments{
 \item{animal_activity}{animal activity dataframe extracted from the MAVEn without
@@ -18,6 +23,10 @@ baseline using \code{extract_activity}.}
 \item{out_filename}{Figure name.}
 
 \item{out_filetype}{Figure file type.}
+}
+\value{
+Plot of standardized activity readings for each cycle within each chamber 
+for selected interval.
 }
 \description{
 \code{activity_trend} graphcially displays the animal activity data by chamber.
