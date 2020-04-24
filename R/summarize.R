@@ -23,10 +23,18 @@ maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
                             out_filename = "ExperimentSummaryTable", 
                             maven_experiment = "") {
     
+
     table <- metabolism_summary_cycle %>% 
         left_join(activity_summary_cycle, by = c("Chamber", "cycle"))
     
     if(!is.null(outdir)){
+      
+      fpath <- file.path(outdir)
+      
+      if(!dir.exists(fpath)){
+        dir.create(fpath)
+      }
+      
     outpath <- file.path(outdir, 
                          out_filename = paste0(Sys.Date(),"_", 
                                                maven_experiment, "_",
