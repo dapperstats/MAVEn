@@ -99,6 +99,12 @@ metabolism_trend <- function(animal_metabolism, maven_experiment = "",
           plot.caption.position =  "plot")
   
   if(!is.null(outdir)){
+    fpath <- file.path(outdir)
+    
+    if(!dir.exists(fpath)){
+      dir.create(fpath)
+    }
+    
   outpath <- file.path(outdir, 
                        out_filename = paste0(Sys.Date(),"_",
                                              maven_experiment, "_",
@@ -164,6 +170,12 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
           plot.caption.position =  "plot")
   
   if(!is.null(outdir)){
+    fpath <- file.path(outdir)
+    
+    if(!dir.exists(fpath)){
+      dir.create(fpath)
+    }
+    
   outpath <- file.path(outdir, 
                        out_filename = paste0(Sys.Date(),"_",
                                              maven_experiment, "_",
@@ -217,6 +229,12 @@ activity_trend <- function(animal_activity,
           plot.caption.position =  "plot")
   
   if(!is.null(outdir)){
+    fpath <- file.path(outdir)
+    
+    if(!dir.exists(fpath)){
+      dir.create(fpath)
+    }
+    
   outpath <- file.path(outdir, 
                        out_filename = paste0(Sys.Date(),"_", 
                                              maven_experiment, "_",
@@ -321,6 +339,12 @@ activity_diag <- function(maven_raw = "",
                        rel_widths = c(0.75,2))
   
   if(!is.null(outdir)){
+    fpath <- file.path(outdir)
+    
+    if(!dir.exists(fpath)){
+      dir.create(fpath)
+    }
+    
   outpath <- file.path(outdir,
                        out_filename = paste0(Sys.Date(),"_",
                                              maven_experiment, "_",
