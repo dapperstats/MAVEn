@@ -50,21 +50,26 @@ evaluate_maven <- function(datadir = "", outdir = NULL,
   
 
   if ("overview" %in% figures) {
-    plot_maven_overview(maven_raw, maven_experiment = maven_experiment)
+    plot_maven_overview(maven_raw, maven_experiment = maven_experiment, 
+                        outdir = outdir)
   } 
   
   if ("trend" %in% figures){
-    metablism_trend(animal_metabolism, maven_experiment = maven_experiment)
-    activity_trend(animal_activity, maven_experiment = maven_experiment)
+    metabolism_trend(animal_metabolism, maven_experiment = maven_experiment, 
+                    outdir = outdir)
+    activity_trend(animal_activity, maven_experiment = maven_experiment,
+                   outdir = outdir)
   } 
   
   if ("diag" %in% figures){
     metabolism_diag(maven_raw, metabolism_summary_cycle, 
-                    maven_experiment = maven_experiment)
+                    maven_experiment = maven_experiment,
+                    outdir = outdir)
     activity_diag(maven_raw, metabolism_summary_cycle, 
                   activity_summary_cycle,
                   maven_experiment = maven_experiment,
-                  interval = interval)
+                  interval = interval,
+                  outdir = outdir)
   }
   
   # final data table
