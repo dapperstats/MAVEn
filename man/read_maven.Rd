@@ -4,7 +4,7 @@
 \alias{read_maven}
 \title{Read MAVEn output into R.}
 \usage{
-read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
+read_maven(datadir = "data", maven_datafile = "", baseline = F)
 }
 \arguments{
 \item{datadir}{Directory where data is stored}

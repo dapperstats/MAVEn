@@ -6,7 +6,7 @@
 \usage{
 activity_trend(
   animal_activity,
-  maven_experiment = "",
+  maven_experiment = experiment_name,
   outdir = NULL,
   out_filename = "ActivityTrends",
   out_filetype = ".png"
@@ -33,5 +33,5 @@ for selected interval.
 The data are adjusted to a standardized measurement reading for illustration.
 }
 \examples{
-#activity_trend(animal_activity, maven_experiment = "maven.example1")
+#activity_trend(animal_activity, maven_experiment = "experiment_name")
 }

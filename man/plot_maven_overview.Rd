@@ -6,7 +6,7 @@
 \usage{
 plot_maven_overview(
   maven_raw,
-  maven_experiment = "",
+  maven_experiment = experiment_name,
   outdir = NULL,
   out_filename = "ExpOverview",
   out_filetype = ".png"

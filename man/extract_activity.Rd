@@ -5,14 +5,14 @@
 \title{Extract animal activity data from MAVEn without baseline}
 \usage{
 extract_activity(
-  maven.cycle,
+  maven_cycle,
   metabolism_summary_cycle,
-  interval = "",
-  activity_baseline = ""
+  interval = activity_interval,
+  activity_baseline = activity_baseline_value
 )
 }
 \arguments{
-\item{maven.cycle}{MAVEn dataset with cycles assigned. Must apply
+\item{maven_cycle}{MAVEn dataset with cycles assigned. Must apply
 \code{assign_cyclenumbers} to MAVEn dataset without baseline data.}
 
 \item{metabolism_summary_cycle}{Summary dataset created by

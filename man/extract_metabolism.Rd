@@ -4,10 +4,10 @@
 \alias{extract_metabolism}
 \title{Extract animal metabolism data from MAVEn without baseline}
 \usage{
-extract_metabolism(maven.cycle)
+extract_metabolism(maven_cycle)
 }
 \arguments{
-\item{maven.cycle}{MAVEn dataset with cycles assigned. Must apply
+\item{maven_cycle}{MAVEn dataset with cycles assigned. Must apply
 \code{assign_cyclenumbers} to MAVEn dataset without baseline data.}
 }
 \value{

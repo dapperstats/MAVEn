@@ -6,7 +6,7 @@
 \usage{
 metabolism_trend(
   animal_metabolism,
-  maven_experiment = "",
+  maven_experiment = experiment_name,
   outdir = NULL,
   out_filename = "MetabolismTrends",
   out_filetype = ".png"
