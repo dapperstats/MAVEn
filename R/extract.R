@@ -4,7 +4,7 @@
 #'integrated MAVEn dataset. It applies a measurement adjustment to the time
 #'series for visualization with \code{metabolism_trend}.
 #'
-#' @param maven.cycle MAVEn dataset with cycles assigned. Must apply
+#' @param maven_cycle MAVEn dataset with cycles assigned. Must apply
 #'  \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
 #'
 #' @return Extracted animal metabolism data.
@@ -14,13 +14,15 @@
 #' @importFrom magrittr %>%
 #'
 #' @export
-extract_metabolism <- function(maven.cycle) {
+extract_metabolism <- function(maven_cycle) {
   
-  met <- maven.cycle %>% 
+  met <- maven_cycle %>% 
     select(Seconds:BP_kPa, c_FRC_mlmin:CO2_mlmin, cycle, 
            CO2_mlminFly1:CO2_mlminFly16) %>%
     pivot_longer(cols = CO2_mlminFly1:CO2_mlminFly16, 
                  names_to = "parameter", values_to = "result") %>%
+    mutate(parameter = as.numeric(gsub("CO2_mlminFly","", parameter))) %>%
+    filter(Chamber == parameter) %>%
     filter(result > 0) %>% ## can we make this assumption?
     arrange(Seconds) %>% 
     group_by(Chamber, cycle) %>%
@@ -37,7 +39,7 @@ extract_metabolism <- function(maven.cycle) {
 #'MAVEn dataset and calculated animal metabolism. It applies a measurement
 #'adjustment to the time series for visualization with \code{activity_trend}.
 #'
-#' @param maven.cycle MAVEn dataset with cycles assigned. Must apply
+#' @param maven_cycle MAVEn dataset with cycles assigned. Must apply
 #'   \code{assign_cyclenumbers} to MAVEn dataset without baseline data.
 #' @param metabolism_summary_cycle Summary dataset created by
 #'   \code{summarize_metabolism}.
@@ -54,21 +56,23 @@ extract_metabolism <- function(maven.cycle) {
 #' @importFrom magrittr %>%
 #' 
 #' @export
-extract_activity <- function(maven.cycle, 
+extract_activity <- function(maven_cycle, 
                              metabolism_summary_cycle, 
-                             interval = "", activity_baseline = "") {
+                             interval = activity_interval, activity_baseline = activity_baseline_value) {
   
   met <- metabolism_summary_cycle %>%
     mutate(act_start = median_time - interval,
            act_end = median_time + interval)
   
-  act <- maven.cycle %>% 
+  act <- maven_cycle %>% 
     select(Seconds:BP_kPa, cycle, c_FRC_mlmin:CO2_mlmin, Act_1:Act_16) %>%
     pivot_longer(cols = Act_1:Act_16, 
                  names_to = "parameter", 
                  values_to = "result") %>%
+    mutate(parameter = as.numeric(gsub("Act_","", parameter))) %>%
+    filter(Chamber == parameter) %>% 
     left_join(met, by = c("Chamber", "cycle")) %>%
-    group_by(Chamber, cycle) %>%
+    #group_by(Chamber, cycle) %>%
     filter(Seconds > median_time - interval & 
              Seconds < median_time + interval) %>%
     group_by(Chamber, cycle) %>%
