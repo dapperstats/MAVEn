@@ -23,7 +23,7 @@
 #' # import without baseline data
 #' #maven <- read_maven(datadir = "data", maven_datafile = "maven_output.csv", baseline = F)
 read_maven <- function(datadir = "data", 
-                        maven_datafile = "maven_output.csv", 
+                        maven_datafile = "", 
                         baseline = F) {
     
     fpath <- file.path(datadir, maven_datafile)
