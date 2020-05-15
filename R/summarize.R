@@ -21,7 +21,7 @@
 maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
                             outdir = NULL, 
                             out_filename = "ExperimentSummaryTable", 
-                            maven_experiment = "") {
+                            maven_experiment = experiment_name) {
     
 
     table <- metabolism_summary_cycle %>% 
@@ -103,7 +103,7 @@ summarize_metabolism <- function(animal_metabolism, type = "") {
 #' #summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
 #' #summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
 summarize_activity <- function(animal_activity, type = "", 
-                               activity_threshold = "0.5") {
+                               activity_threshold = "0.0") {
     
     n_cycles <- as.numeric(max(animal_activity$cycle))
     
