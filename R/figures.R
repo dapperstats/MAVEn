@@ -201,8 +201,8 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' @param out_filetype Figure file type.
 #'
 #' @export
-#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d scale_y_continuous
-#' theme ggsave
+#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d
+#' scale_y_continuous geom_hline theme ggsave
 #'
 #' @return Plot of standardized activity readings for each cycle within each chamber 
 #' for selected interval. 
@@ -213,18 +213,23 @@ activity_trend <- function(animal_activity,
                            maven_experiment = experiment_name,
                            outdir = NULL, 
                            out_filename = "ActivityTrends", 
-                           out_filetype = ".png") {
+                           out_filetype = ".png",
+                           activity_baseline = activity_baseline_value) {
   
   p <- ggplot(data = animal_activity, 
               aes(x = measurement_number, y = result, col = cycle)) + 
-    geom_point() + 
-	facet_wrap(~ Chamber) + 
-	scale_y_continuous(limits = c(0, NA)) +
+    geom_point() +
+    geom_point(data = animal_activity %>% 
+                 filter(result_flag == "bth"), 
+                        col = "grey") + # color the points below the threshold
+    facet_wrap(~ Chamber) + 
+    scale_y_continuous(limits = c(0, NA)) +
     labs(title = "Animal Activity Trends", 
          x = "Measurement Number", 
          y = "Activity",
          caption = maven_experiment) + 
     scale_color_viridis_d(option = "D", begin = 0.2, end = 0.8) +
+    geom_hline(yintercept = activity_baseline) +
     theme(legend.position = "bottom",
           plot.title.position = "plot", 
           plot.caption.position =  "plot")

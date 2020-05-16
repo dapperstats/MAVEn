@@ -76,9 +76,10 @@ extract_activity <- function(maven_cycle,
     filter(Seconds > median_time - interval & 
              Seconds < median_time + interval) %>%
     group_by(Chamber, cycle) %>%
-    mutate(measurement_number = Seconds - min(Seconds) + 1) %>%
-    filter(result >= activity_baseline, # remove data that are not above threshold
-           cycle != "NA") # filter out data that do not have cycle assignment
+    mutate(measurement_number = Seconds - min(Seconds) + 1,
+           result_flag = ifelse(result < activity_baseline, "bth", "")) #%>%
+    #lter(result >= activity_baseline, # remove data that are not above threshold
+           #cycle != "NA") # filter out data that do not have cycle assignment
   
   return(act)
 }
