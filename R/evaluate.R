@@ -18,9 +18,9 @@ evaluate_maven <- function(datadir = "", outdir = NULL,
                            activity_threshold = 1, 
                            figures = c("trend","diag","overview")){
   
-  maven_experiment <- strsplit(split = ".csv", maven_datafile)[[1]]
+  maven_experiment_name <- strsplit(split = ".csv", maven_datafile)[[1]]
   outdir <- paste0("analysis_",format(Sys.time(), "%Y%m%d-%H%M"),
-                   "_", maven_experiment)
+                   "_", maven_experiment_name)
   
   fpath <- file.path(outdir)
   
@@ -53,25 +53,25 @@ evaluate_maven <- function(datadir = "", outdir = NULL,
   
 
   if ("overview" %in% figures) {
-    plot_maven_overview(maven_raw, maven_experiment = maven_experiment, 
+    plot_maven_overview(maven_raw, maven_experiment = maven_experiment_name, 
                         outdir = outdir)
   } 
   
   if ("trend" %in% figures){
-    metabolism_trend(animal_metabolism, maven_experiment = maven_experiment, 
+    metabolism_trend(animal_metabolism, maven_experiment = maven_experiment_name, 
                     outdir = outdir)
-    activity_trend(animal_activity, maven_experiment = maven_experiment,
+    activity_trend(animal_activity, maven_experiment = maven_experiment_name,
                    activity_baseline = activity_baseline,
                    outdir = outdir)
   } 
   
   if ("diag" %in% figures){
     metabolism_diag(maven_raw, metabolism_summary_cycle, 
-                    maven_experiment = maven_experiment,
+                    maven_experiment = maven_experiment_name,
                     outdir = outdir)
     activity_diag(maven_raw, metabolism_summary_cycle, 
                   activity_summary_cycle,
-                  maven_experiment = maven_experiment,
+                  maven_experiment = maven_experiment_name,
                   interval = interval,
                   outdir = outdir)
   }
@@ -79,6 +79,6 @@ evaluate_maven <- function(datadir = "", outdir = NULL,
   # final data table
   out <- maven_datatable(outdir = outdir,
                          metabolism_summary_cycle, activity_summary_cycle, 
-                         maven_experiment = maven_experiment)   
+                         maven_experiment = maven_experiment_name)   
   return(out)
 }
