@@ -19,7 +19,7 @@
 #' @return Four panel plot of experimental overview for quick diagnostics. Includes, Chamber readings, Thermocouple 1 (TC1), Flow rate in the sample/animal chamber (ml/min) (FRC_mlmin), and carbon dioxide (CO[2], ppm).
 #' 
 #' @export
-plot_maven_overview <- function(maven_raw, maven_experiment = experiment_name,
+plot_maven_overview <- function(maven_raw, maven_experiment = "",
                                 outdir = NULL, out_filename = "ExpOverview",
                                 out_filetype = ".png") {
   
@@ -80,7 +80,7 @@ plot_maven_overview <- function(maven_raw, maven_experiment = experiment_name,
 #'
 #' @examples #metabolism_trend(animal_metabolism, outdir = "output",
 #' #out_filename = "", out_filetype = ".png")
-metabolism_trend <- function(animal_metabolism, maven_experiment = experiment_name,
+metabolism_trend <- function(animal_metabolism, maven_experiment = "",
                             outdir = NULL, out_filename = "MetabolismTrends",
                             out_filetype = ".png") {
   
@@ -138,7 +138,7 @@ metabolism_trend <- function(animal_metabolism, maven_experiment = experiment_na
 #' #outdir = "output", out_filename = "MetabolismDiagnostic", 
 #' #out_filetype = ".png")
 metabolism_diag <- function(maven_raw, metabolism_summary_cycle, 
-                            maven_experiment = experiment_name,
+                            maven_experiment = "",
                             outdir = NULL, 
                             out_filename = "MetabolismDiagnostic",
                             out_filetype = ".png") {
@@ -199,6 +199,7 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' @param outdir Folder where figure should be stored.
 #' @param out_filename Figure name.
 #' @param out_filetype Figure file type.
+#' @param activity_baseline Baseline value for data inclusion.
 #'
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d
@@ -210,11 +211,11 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' @examples 
 #' #activity_trend(animal_activity, maven_experiment = "experiment_name")
 activity_trend <- function(animal_activity, 
-                           maven_experiment = experiment_name,
+                           maven_experiment = "",
                            outdir = NULL, 
                            out_filename = "ActivityTrends", 
                            out_filetype = ".png",
-                           activity_baseline = activity_baseline_value) {
+                           activity_baseline = "") {
   
   p <- ggplot(data = animal_activity, 
               aes(x = measurement_number, y = result, col = cycle)) + 
@@ -272,7 +273,7 @@ activity_trend <- function(animal_activity,
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes geom_point facet_grid labs theme element_text geom_rect geom_line scale_fill_manual scale_color_manual ggsave
 #' @importFrom cowplot plot_grid
-#' @importFrom RColorBrewer brewer.pal
+#' @importFrom stats setNames
 #' 
 #' @return Plot with raw MAVEn data, calculated median metabolism, and 
 #' animal activity. Coloured boxes represent the calculated activity 
@@ -283,9 +284,9 @@ activity_trend <- function(animal_activity,
 activity_diag <- function(maven_raw = "maven_raw",
                           metabolism_summary_cycle = "metabolism_summary_cycle",
                           activity_summary_cycle = "activity_summary_cycle",
-                          interval = activity_interval,
+                          interval = "",
                           outdir = NULL,
-                          maven_experiment = experiment_name,
+                          maven_experiment = "",
                           out_filename = "ActivityDiagnostic",
                           out_filetype = ".png") {
   
@@ -319,8 +320,8 @@ activity_diag <- function(maven_raw = "maven_raw",
           plot.title.position = "plot",
           plot.caption.position =  "plot")
   
-  activity_colors <- setNames(c("#1B9E77", "#D95F02"),
-                              c("Active", "Inactive"))
+  activity_colors <- setNames(c("#1B9E77", "#D95F02", "grey"),
+                              c("Active", "Inactive", "Inactive (< Threshold)"))
   
   p <- ggplot() +
     geom_rect(data = maven_summary,
