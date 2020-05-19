@@ -78,6 +78,15 @@ Evaluating the experimental time course is a vital step to check for issues with
 
 Here, we read in the full MAVEn data set that includes the baseline data by toggling `baseline = T` in the `read_maven` function. 
 
+```{r analysis_defaults}
+
+experiment_name <- "maven_analysis_output"
+activity_interval_value <- 60
+activity_baseline_value <- 0.01
+activity_threshold_value <- 1
+```
+
+
 ```{r loadRawData}
 
 maven_raw <- read_maven(datadir = "../inst/extdata", 
@@ -91,7 +100,7 @@ Raw data are imported into `plot_maven_overview` to produce four time series plo
 
 ```{r plotOverview, fig.height = 6, fig.width = 6, out.width="70%"}
 
-plot_maven_overview(maven_raw, maven_experiment = "maven.example1")
+plot_maven_overview(maven_raw, maven_experiment = experiment_name)
 
 ```
 
@@ -118,9 +127,9 @@ Cycle assignment using `assign_cyclenumber` is responsive to those cases and wil
 
 ```{r assign-cyclenumber}
 
-maven.cycle <- assign_cyclenumber(maven)
+maven_cycle <- assign_cyclenumber(maven)
 
-tibble(maven.cycle)
+tibble(maven_cycle)
 ```
 
 
@@ -132,7 +141,7 @@ These data are extracted from the CO2_mlminFly1:CO2_mlminFly16 columns in cycle-
 
 ```{r exract-metabolism}
 
-animal_metabolism <- extract_metabolism(maven.cycle)
+animal_metabolism <- extract_metabolism(maven_cycle)
 
 tibble(animal_metabolism)
 ```
@@ -145,13 +154,13 @@ These plots are generated with the ggplot2 package, which means they can be modi
 
 ```{r plot-MetabolismTrend, fig.height = 6, fig.width = 7, out.width="70%"}
 
-metabolism_trend(animal_metabolism, maven_experiment = "maven.example1")
+metabolism_trend(animal_metabolism, maven_experiment = experiment_name)
 
 ```
 
 ```{r plot-MetabolismTrend-options, fig.height = 6, fig.width = 7, out.width = "70%"}
 
-p <- metabolism_trend(animal_metabolism, maven_experiment = "maven.example1")
+p <- metabolism_trend(animal_metabolism, maven_experiment = experiment_name)
 p + scale_color_brewer(palette = "Dark2")
 
 ```
@@ -193,7 +202,7 @@ This figure also saves the graphic by default as `MetabolismDiagnostics.png`
 ```{r plot-MetabolismDiag, fig.height = 10, fig.width = 7, out.width="70%"}
 
 metabolism_diag(maven_raw, metabolism_summary_cycle, 
-                maven_experiment = "maven.example1")
+                maven_experiment = experiment_name)
 
 ```
 
@@ -206,8 +215,9 @@ However, because of how the instrument begins and ends an experimental run, havi
 
 ```{r}
 
-animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle,
-                                interval = 60, activity_baseline = 0.01)
+animal_activity <- extract_activity(maven_cycle, metabolism_summary_cycle,
+                                interval = activity_interval_value, 
+                                activity_baseline = activity_baseline_value)
 tibble(animal_activity) 
 ```
  
@@ -217,7 +227,8 @@ As with the metabolism data, activity trends can also be plotted with the standa
 
 ```{r fig.height = 6, fig.width = 7, out.width="70%"}
 
-activity_trend(animal_activity, maven_experiment = "maven.example1")
+activity_trend(animal_activity, maven_experiment = experiment_name, 
+               activity_baseline = activity_baseline_value)
 
 ```
 
@@ -228,7 +239,8 @@ activity_trend(animal_activity, maven_experiment = "maven.example1")
 
 activity_summary_cycle <- summarize_activity(animal_activity, 
                                              type = "by_cycle",
-                                             activity_threshold = 1)
+                                             activity_threshold = 
+                                               activity_threshold_value)
 ```
 
 ```{r table-summarize-activitycycle, echo = FALSE}
@@ -258,7 +270,8 @@ The periods of activity measurements are indicated by a colored rectangle that s
 ```{r plot-ActivityDiag, fig.height = 11, fig.width = 7, out.width="70%"}
 
 activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
-              maven_experiment = "maven.example1", interval = 60)
+              maven_experiment = experiment_name, 
+              interval = activity_interval_value)
 
 ```
 
@@ -267,13 +280,13 @@ activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle,
 
 ```{r create-datafile}
 maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
-                            maven_experiment = "maven.example1")
+                            maven_experiment = experiment_name)
 ```
 
 ```{r, eval = T, fig.width = 5, fig.height=5, out.width="70%"}
 
 test.out <- maven_datatable(metabolism_summary_cycle, activity_summary_cycle,
-                            maven_experiment = "maven.example1")
+                            maven_experiment = experiment_name)
 
 
 ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
