@@ -7,7 +7,7 @@
 metabolism_diag(
   maven_raw,
   metabolism_summary_cycle,
-  maven_experiment = experiment_name,
+  maven_experiment = "",
   outdir = NULL,
   out_filename = "MetabolismDiagnostic",
   out_filetype = ".png"

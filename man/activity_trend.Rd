@@ -6,10 +6,11 @@
 \usage{
 activity_trend(
   animal_activity,
-  maven_experiment = experiment_name,
+  maven_experiment = "",
   outdir = NULL,
   out_filename = "ActivityTrends",
-  out_filetype = ".png"
+  out_filetype = ".png",
+  activity_baseline = ""
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ baseline using \code{extract_activity}.}
 \item{out_filename}{Figure name.}
 
 \item{out_filetype}{Figure file type.}
+
+\item{activity_baseline}{Baseline value for data inclusion.}
 }
 \value{
 Plot of standardized activity readings for each cycle within each chamber 

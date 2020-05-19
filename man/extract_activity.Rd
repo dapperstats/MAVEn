@@ -7,8 +7,8 @@
 extract_activity(
   maven_cycle,
   metabolism_summary_cycle,
-  interval = activity_interval,
-  activity_baseline = activity_baseline_value
+  interval = "",
+  activity_baseline = ""
 )
 }
 \arguments{

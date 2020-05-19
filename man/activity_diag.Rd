@@ -8,9 +8,9 @@ activity_diag(
   maven_raw = "maven_raw",
   metabolism_summary_cycle = "metabolism_summary_cycle",
   activity_summary_cycle = "activity_summary_cycle",
-  interval = activity_interval,
+  interval = "",
   outdir = NULL,
-  maven_experiment = experiment_name,
+  maven_experiment = "",
   out_filename = "ActivityDiagnostic",
   out_filetype = ".png"
 )
