@@ -38,7 +38,7 @@ library(MAVEn)
 
 experiment_name <- "maven_output"
 activity_interval <- 60
-activity_baseline_value <- 0
+activity_baseline_value <- 0.01
 
 ## Evaluate the experimental timecourse ----
 
@@ -60,12 +60,12 @@ maven <- read_maven(datadir = "data",
 # This function is responsive to where the instrument begins its readings
 #  and will assign the start of a cycle to Chamber 1
 
-maven.cycle <- assign_cyclenumber(maven)
+maven_cycle <- assign_cyclenumber(maven)
 
 
 # Step 3a: Extract the metabolism data from the dataset ----
 
-animal_metabolism <- extract_metabolism(maven.cycle)
+animal_metabolism <- extract_metabolism(maven_cycle)
 
 
 # Step 3b: Visualize the trend data to check for issues in measurements ----
@@ -80,7 +80,7 @@ animal_metabolism <- extract_metabolism(maven.cycle)
 # Because these plots are generated with the ggplot2 package, you can save each
 #  as an object and modify as you wish with themes, colors, etc. 
 
-metabolism_trend(animal_metabolism)
+metabolism_trend(animal_metabolism, maven_experiment = experiment_name)
 
 
 # Step 4: Produce a summary table for animal metabolism ----
@@ -109,7 +109,8 @@ metabolism_summary_chamber <- summarize_metabolism(animal_metabolism,
 #
 # This figure also saves the graphic by default as `MetabolismDiagnostics.png`
 
-metabolism_diag(maven_raw, metabolism_summary_cycle)
+metabolism_diag(maven_raw, metabolism_summary_cycle,
+                maven_experiment = experiment_name)
 
 
 # Step 6a: Extract animal activity data based on metabolism calculations ----
@@ -120,13 +121,16 @@ metabolism_diag(maven_raw, metabolism_summary_cycle)
 #   select a value no longer than 60 seconds (within the CO2 measurement 
 #   interval)
 
-animal_activity <- extract_activity(maven.cycle, metabolism_summary_cycle)
+animal_activity <- extract_activity(maven_cycle, metabolism_summary_cycle, 
+                                    interval = activity_interval,
+                                    activity_baseline = activity_baseline_value)
 
 # Step 6b: Plot animal activity ----
 #
 # These plots are again, standardized by the measurement number
 
-activity_trend(animal_activity)
+activity_trend(animal_activity, maven_experiment = experiment_name,
+               activity_baseline = activity_baseline_value)
 
 # Step 7: Generate animal activity summary tables ----
 #
@@ -140,7 +144,8 @@ activity_summary_chamber <- summarize_activity(animal_activity,
 
 
 # Step 8: Visual diagnostic of animal activity ----
-activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle)
+activity_diag(maven_raw, metabolism_summary_cycle, activity_summary_cycle, 
+              interval = activity_interval)
 
 
 
@@ -162,8 +167,5 @@ ggplot(test.out, aes(x = activity_state, y = median_co2_ul.h, col = cycle)) +
 
 ## Complete analysis workflow ----
 evaluate_maven(datadir = "data",
-               maven_datafile = "maven_output.csv", 
-               maven_experiment = "maven_output",
-               activity_baseline = 0.0, activity_threshold = 0.75,
-               outdir = "./complete_analysis")
-
+               maven_datafile = "MAVEn 129 2019-11-22_8WT-8mettl4b-eclOct23_males-R.csv", 
+               activity_baseline = 0.01, activity_threshold = 0.75)
