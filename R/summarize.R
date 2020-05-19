@@ -21,7 +21,7 @@
 maven_datatable <- function(metabolism_summary_cycle, activity_summary_cycle,
                             outdir = NULL, 
                             out_filename = "ExperimentSummaryTable", 
-                            maven_experiment = "") {
+                            maven_experiment = experiment_name) {
     
 
     table <- metabolism_summary_cycle %>% 
@@ -96,23 +96,31 @@ summarize_metabolism <- function(animal_metabolism, type = "") {
 #' @export
 #' 
 #' @importFrom magrittr %>%
-#' @importFrom dplyr group_by summarize mutate
+#' @importFrom dplyr group_by summarize mutate distinct
 #' @importFrom stats median sd
 #'
 #' @examples 
 #' #summarize_activity(animal_activity, type = "by_cycle", activity_threshold = 0.5)
 #' #summarize_activity(animal_activity, type = "by_chamber", activity_threshold = 0.5)
 summarize_activity <- function(animal_activity, type = "", 
-                               activity_threshold = "0.5") {
+                               activity_threshold = "0.0") {
     
+    unique_levels <- animal_activity %>% distinct(Chamber, cycle)
+  
     n_cycles <- as.numeric(max(animal_activity$cycle))
     
     act_summary <- animal_activity %>% 
-        group_by(Chamber, cycle) %>% 
-        summarize(mean_activity = mean(result, na.rm = T), 
-                  median_activity = median(result, na.rm = T)) %>% 
-        mutate(activity_state = ifelse(mean_activity >= activity_threshold, 
-                                       "Active", "Inactive"))
+      filter(result_flag != "bth") %>%
+      group_by(Chamber, cycle) %>% 
+      summarize(mean_activity = mean(result, na.rm = T), 
+                median_activity = median(result, na.rm = T)) %>% 
+      mutate(activity_state = ifelse(mean_activity >= activity_threshold, 
+                                     "Active", "Inactive"))
+    
+    act_summary <- unique_levels %>% 
+      left_join(act_summary, by = c("Chamber", "cycle")) %>%
+      mutate(activity_state = ifelse(is.na(activity_state), 
+                                     "Inactive (< Threshold)", activity_state))
     
     if (type == "by_chamber") {
         act_summary <- act_summary %>% 

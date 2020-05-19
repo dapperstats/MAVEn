@@ -5,10 +5,10 @@
 \title{Visual diagnostic for activity data using MAVEn with baseline}
 \usage{
 activity_diag(
-  maven_raw = "",
-  metabolism_summary_cycle = "",
-  activity_summary_cycle = "",
-  interval = 120,
+  maven_raw = "maven_raw",
+  metabolism_summary_cycle = "metabolism_summary_cycle",
+  activity_summary_cycle = "activity_summary_cycle",
+  interval = "",
   outdir = NULL,
   maven_experiment = "",
   out_filename = "ActivityDiagnostic",

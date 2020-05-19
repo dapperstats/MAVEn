@@ -9,7 +9,7 @@ maven_datatable(
   activity_summary_cycle,
   outdir = NULL,
   out_filename = "ExperimentSummaryTable",
-  maven_experiment = ""
+  maven_experiment = experiment_name
 )
 }
 \arguments{

@@ -7,8 +7,7 @@
 evaluate_maven(
   datadir = "",
   outdir = NULL,
-  maven_datafile = "./maven_output.csv",
-  maven_experiment = "",
+  maven_datafile = "maven_output.csv",
   interval = 60,
   activity_baseline = 0.01,
   activity_threshold = 1,
@@ -22,8 +21,6 @@ evaluate_maven(
 
 \item{maven_datafile}{name of data file to be evaluated. Must be ".csv".}
 
-\item{maven_experiment}{name of experiment}
-
 \item{interval}{specified interval for activity calculations. Must be in secoonds and defaults to 60.}
 
 \item{activity_baseline}{Activity measurement baseline. Used to exclude values from dataset.}
@@ -31,6 +28,8 @@ evaluate_maven(
 \item{activity_threshold}{Activity threshold used for calculating activity status (e.g. inactive vs. active)}
 
 \item{figures}{figures to be produced. Select from "overview", "diag", or "trend". Supply all three in list if you want all to be created.}
+
+\item{maven_experiment}{name of experiment}
 }
 \description{
 Evaluate entire MAVEn dataset

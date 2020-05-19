@@ -4,7 +4,12 @@
 \alias{assign_cyclenumber}
 \title{Assign cycle number to MAVEn dataset}
 \usage{
-assign_cyclenumber(maven, n_chambers = 16, chamber_measure_duration = 120)
+assign_cyclenumber(
+  maven,
+  n_chambers = 16,
+  chamber_measure_duration = 120,
+  cycle_window = 30
+)
 }
 \arguments{
 \item{maven}{MAVEn dataset without baseline.}
@@ -15,6 +20,9 @@ to the instrument platform.}
 \item{chamber_measure_duration}{Instrument read time per chamber. Defaults 
 to 120 seconds. Only change if instrument read time per chamber is altered 
 for an experimental run.}
+
+\item{cycle_window}{Additional parameter to regulate cycle assignment.
+Default = 30 seconds.}
 }
 \value{
 Dataset with a cycle number assigned to readings from Chambers 1 to 

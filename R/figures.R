@@ -199,31 +199,38 @@ metabolism_diag <- function(maven_raw, metabolism_summary_cycle,
 #' @param outdir Folder where figure should be stored.
 #' @param out_filename Figure name.
 #' @param out_filetype Figure file type.
+#' @param activity_baseline Baseline value for data inclusion.
 #'
 #' @export
-#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d 
-#' theme ggsave
+#' @importFrom ggplot2 ggplot aes geom_point facet_wrap labs scale_color_viridis_d
+#' scale_y_continuous geom_hline theme ggsave
 #'
 #' @return Plot of standardized activity readings for each cycle within each chamber 
 #' for selected interval. 
 #'
 #' @examples 
-#' #activity_trend(animal_activity, maven_experiment = "maven.example1")
+#' #activity_trend(animal_activity, maven_experiment = "experiment_name")
 activity_trend <- function(animal_activity, 
                            maven_experiment = "",
                            outdir = NULL, 
                            out_filename = "ActivityTrends", 
-                           out_filetype = ".png") {
+                           out_filetype = ".png",
+                           activity_baseline = "") {
   
   p <- ggplot(data = animal_activity, 
               aes(x = measurement_number, y = result, col = cycle)) + 
-    geom_point() + 
-    facet_wrap(~ Chamber, scales = "free_y") + 
+    geom_point() +
+    geom_point(data = animal_activity %>% 
+                 filter(result_flag == "bth"), 
+                        col = "grey") + # color the points below the threshold
+    facet_wrap(~ Chamber) + 
+    scale_y_continuous(limits = c(0, NA)) +
     labs(title = "Animal Activity Trends", 
          x = "Measurement Number", 
          y = "Activity",
          caption = maven_experiment) + 
     scale_color_viridis_d(option = "D", begin = 0.2, end = 0.8) +
+    geom_hline(yintercept = activity_baseline) +
     theme(legend.position = "bottom",
           plot.title.position = "plot", 
           plot.caption.position =  "plot")
@@ -264,8 +271,9 @@ activity_trend <- function(animal_activity,
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select mutate
 #' @importFrom tidyr pivot_longer
-#' @importFrom ggplot2 ggplot aes geom_point facet_grid labs theme element_text geom_rect geom_line scale_fill_brewer scale_color_brewer ggsave
+#' @importFrom ggplot2 ggplot aes geom_point facet_grid labs theme element_text geom_rect geom_line scale_fill_manual scale_color_manual ggsave
 #' @importFrom cowplot plot_grid
+#' @importFrom stats setNames
 #' 
 #' @return Plot with raw MAVEn data, calculated median metabolism, and 
 #' animal activity. Coloured boxes represent the calculated activity 
@@ -273,10 +281,10 @@ activity_trend <- function(animal_activity,
 #'
 #' @export
 #'
-activity_diag <- function(maven_raw = "",
-                          metabolism_summary_cycle = "",
-                          activity_summary_cycle = "",
-                          interval = 120,
+activity_diag <- function(maven_raw = "maven_raw",
+                          metabolism_summary_cycle = "metabolism_summary_cycle",
+                          activity_summary_cycle = "activity_summary_cycle",
+                          interval = "",
                           outdir = NULL,
                           maven_experiment = "",
                           out_filename = "ActivityDiagnostic",
@@ -312,6 +320,9 @@ activity_diag <- function(maven_raw = "",
           plot.title.position = "plot",
           plot.caption.position =  "plot")
   
+  activity_colors <- setNames(c("#1B9E77", "#D95F02", "grey"),
+                              c("Active", "Inactive", "Inactive (< Threshold)"))
+  
   p <- ggplot() +
     geom_rect(data = maven_summary,
               aes(xmin = interval.start,
@@ -332,8 +343,9 @@ activity_diag <- function(maven_raw = "",
     theme(legend.position = "bottom",
           plot.title.position = "plot",
           plot.caption.position =  "plot") +
-    scale_fill_brewer(palette = "Dark2") +
-    scale_color_brewer(palette = "Dark2")
+    scale_fill_manual(values = activity_colors) +
+    scale_color_manual(values = activity_colors)
+
   
   p.merge <- plot_grid(p.met, p, ncol = 2, align = "hv", axis = "tb",
                        rel_widths = c(0.75,2))

@@ -12,12 +12,15 @@
 #' @export
 #'
 evaluate_maven <- function(datadir = "", outdir = NULL,
-                           maven_datafile = "./maven_output.csv", 
-                           maven_experiment = "", 
+                           maven_datafile = "maven_output.csv", 
                            interval = 60, 
                            activity_baseline = 0.01,
                            activity_threshold = 1, 
                            figures = c("trend","diag","overview")){
+  
+  maven_experiment <- strsplit(split = ".csv", maven_datafile)[[1]]
+  outdir <- paste0("analysis_",format(Sys.time(), "%Y%m%d-%H%M"),
+                   "_", maven_experiment)
   
   fpath <- file.path(outdir)
   
@@ -58,6 +61,7 @@ evaluate_maven <- function(datadir = "", outdir = NULL,
     metabolism_trend(animal_metabolism, maven_experiment = maven_experiment, 
                     outdir = outdir)
     activity_trend(animal_activity, maven_experiment = maven_experiment,
+                   activity_baseline = activity_baseline,
                    outdir = outdir)
   } 
   
