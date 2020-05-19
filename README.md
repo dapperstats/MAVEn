@@ -1,5 +1,7 @@
 # MAVEn: A Worflow Pipeline for Processing MAVEn Datasets
 
+**version 1.0.0**  *2020-05-18*
+
 This repository holds the code being developed for Providence College (PC) and James S. Waters, coded by Megan L. Larsen & Juniper L. Simonis of DAPPER Stats. 
 
 The repository is private and code is not to be shared ouutside of this collaboration.
