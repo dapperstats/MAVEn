@@ -10,6 +10,8 @@
 #' @param chamber_measure_duration Instrument read time per chamber. Defaults 
 #' to 120 seconds. Only change if instrument read time per chamber is altered 
 #' for an experimental run.
+#' @param cycle_window Additional parameter to regulate cycle assignment.
+#' Default = 30 seconds. 
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr arrange mutate
@@ -21,7 +23,8 @@
 #' @export
 assign_cyclenumber <- function(maven,
     n_chambers = 16,
-    chamber_measure_duration = 120) {
+    chamber_measure_duration = 120,
+    cycle_window = 30) {
     
     df <-  maven %>% arrange(Seconds)
     diff.list <- c()
@@ -56,7 +59,7 @@ assign_cyclenumber <- function(maven,
     start_lastcycle <- tail(time_list, n = 2)[1]
     end_lastcycle <-  start_lastcycle + cycle_duration
     
-    if(df$Seconds[dim(df)[1]] <= end_lastcycle){
+    if((tail(df$Seconds, 1) + cycle_window) <= end_lastcycle){
         df <- df %>% mutate(cycle = ifelse(Seconds >= start_lastcycle, NA, cycle))
 
     }
