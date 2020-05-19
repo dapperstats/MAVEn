@@ -58,7 +58,8 @@ extract_metabolism <- function(maven_cycle) {
 #' @export
 extract_activity <- function(maven_cycle, 
                              metabolism_summary_cycle, 
-                             interval = activity_interval, activity_baseline = activity_baseline_value) {
+                             interval = "", 
+                             activity_baseline = "") {
   
   met <- metabolism_summary_cycle %>%
     mutate(act_start = median_time - interval,
@@ -70,9 +71,9 @@ extract_activity <- function(maven_cycle,
                  names_to = "parameter", 
                  values_to = "result") %>%
     mutate(parameter = as.numeric(gsub("Act_","", parameter))) %>%
-    filter(Chamber == parameter) %>% 
+    filter(Chamber == parameter) %>% #select the activity data that matches the metabolism chamber reading
     left_join(met, by = c("Chamber", "cycle")) %>%
-    #group_by(Chamber, cycle) %>%
+    group_by(Chamber, cycle) %>%
     filter(Seconds > median_time - interval & 
              Seconds < median_time + interval) %>%
     group_by(Chamber, cycle) %>%
