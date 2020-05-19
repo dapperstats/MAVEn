@@ -19,7 +19,7 @@ evaluate_maven <- function(datadir = "", outdir = NULL,
                            figures = c("trend","diag","overview")){
   
   maven_experiment_name <- strsplit(split = ".csv", maven_datafile)[[1]]
-  outdir <- paste0("analysis_",format(Sys.time(), "%Y%m%d-%H%M"),
+  outdir <- paste0("./output/analysis_",format(Sys.time(), "%Y%m%d-%H%M"),
                    "_", maven_experiment_name)
   
   fpath <- file.path(outdir)
