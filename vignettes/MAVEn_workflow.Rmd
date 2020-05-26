@@ -45,7 +45,7 @@ library(MAVEn)
 
 MAVEn data are exported from the instrument as a large table of instrument, CO<sub>2</sub>, and activity data for animals across 16 chambers. Here, we demonstrate a workflow pipeline for evaluating MAVEn metabolism and activity data with flexibility in calculating animal activity status. 
 
-There are two workflow strategies: (1) one that leverages all the functionality within the code base to work through and evaluate data in a step wise fashion and (2) one that integrates all the package functions into a single function, `evaluate_maven`, for fast data proc. Both are outlined below. 
+There are two workflow strategies: (1) one that leverages all the functionality within the code base to work through and evaluate data in a step wise fashion and (2) one that integrates all the package functions into a single function, `evaluate_maven`, for fast data processing. Both are outlined below. 
 
 Functions are built on specific data, so it is imperative to make sure the information provided in each of the functions matches the function parameter. 
 
