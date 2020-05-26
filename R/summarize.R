@@ -120,7 +120,7 @@ summarize_activity <- function(animal_activity, type = "",
     act_summary <- unique_levels %>% 
       left_join(act_summary, by = c("Chamber", "cycle")) %>%
       mutate(activity_state = ifelse(is.na(activity_state), 
-                                     "Inactive (< Threshold)", activity_state))
+                                     "Inactive", activity_state))
     
     if (type == "by_chamber") {
         act_summary <- act_summary %>% 
