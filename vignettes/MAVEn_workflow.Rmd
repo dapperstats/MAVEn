@@ -1,9 +1,9 @@
 ---
-title: "MAVEn_workflow"
+title: "mavenR_workflow"
 author: Megan L. Larsen & Juniper L. Simonis
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{MAVEn_workflow}
+  %\VignetteIndexEntry{mavenR_workflow}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -37,7 +37,7 @@ library(ggplot2); library(pander); library(tidyr)
 
 ```{r}
 
-library(MAVEn)
+library(mavenR)
 
 ```
 
