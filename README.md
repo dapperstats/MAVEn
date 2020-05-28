@@ -1,4 +1,4 @@
-# MAVEn: A Worflow Pipeline for Processing MAVEn Datasets
+# mavenR: A Worflow Pipeline for Processing MAVEn Datasets
 
 **version 1.0.0**  *2020-05-18*
 
