@@ -1,0 +1,25 @@
+---
+Title: "MAVEn Implementation"
+Authors: "Megan L. Larsen, Juniper L. Simonis, James Waters"
+Date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  pdf_document
+fontsize: 12pt
+geometry: margin=1in
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Here, we list a known stable build session info.
+
+## R Build
+
+```{r}
+sessionInfo()
+```
