@@ -2,7 +2,9 @@
 
 **version 1.0.0**  *2020-05-18*
 
-This repository holds the code being developed for Providence College (PC) and James S. Waters, coded by Megan L. Larsen & Juniper L. Simonis of DAPPER Stats. 
+This repository holds code being developed by James S. Waters at Providence College (PC) to analyze high-throughput metabolic phenotyping data. We are grateful for the assistance of Megan L. Larsen & Juniper L. Simonis of DAPPER Stats in the initial code development and release. 
+
+For a brief overview of the analysis pipeline, [a vignette is available here][https://waterslab.github.io/mavenR/vignettes/mavenworkflow.html].
 
 The 'mavenR' package provides a current working version of the code pipeline.
 
